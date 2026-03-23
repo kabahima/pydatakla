@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}PyData Kampala{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Georgia', 'Cambria', 'serif'],
+          },
+        },
+      },
+    }
+  </script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-green-950 text-white min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <header class="flex items-center justify-between px-6 md:px-10 py-5 border-b border-green-800">
+    <a href="{% url 'conference:home' %}" class="flex items-center gap-2">
+      <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+      <span class="text-xl font-bold tracking-wide text-white">PyData <span class="text-green-400">Kampala</span></span>
+    </a>
+
+    <!-- Mobile menu toggle -->
+    <button id="menu-toggle" class="md:hidden text-green-300 focus:outline-none">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <nav id="nav-links" class="hidden md:flex gap-6 text-sm font-medium">
+      <a href="{% url 'conference:talks' %}" class="hover:text-green-300 transition {% if request.resolver_match.url_name == 'talks' %}text-green-300{% endif %}">Talks</a>
+      <a href="{% url 'conference:schedule' %}" class="hover:text-green-300 transition {% if request.resolver_match.url_name == 'schedule' %}text-green-300{% endif %}">Schedule</a>
+      <a href="{% url 'conference:speakers' %}" class="hover:text-green-300 transition {% if request.resolver_match.url_name == 'speakers' %}text-green-300{% endif %}">Speakers</a>
+      <a href="{% url 'conference:sponsors' %}" class="hover:text-green-300 transition {% if request.resolver_match.url_name == 'sponsors' %}text-green-300{% endif %}">Sponsors&nbsp;/&nbsp;Jobs</a>
+      <a href="{% url 'conference:conduct' %}" class="hover:text-green-300 transition {% if request.resolver_match.url_name == 'conduct' %}text-green-300{% endif %}">Conduct</a>
+      <a href="{% url 'conference:about' %}" class="hover:text-green-300 transition {% if request.resolver_match.url_name == 'about' %}text-green-300{% endif %}">About</a>
+    </nav>
+
+    <a href="{% url 'conference:schedule' %}"
+       class="hidden md:inline-block bg-green-400 text-black px-5 py-2 rounded-full font-semibold hover:bg-green-300 transition text-sm">
+      Register →
+    </a>
+  </header>
+
+  <!-- Mobile nav drawer -->
+  <div id="mobile-nav" class="hidden md:hidden bg-green-900 px-6 py-4 flex flex-col gap-4 text-sm font-medium border-b border-green-800">
+    <a href="{% url 'conference:talks' %}" class="hover:text-green-300">Talks</a>
+    <a href="{% url 'conference:schedule' %}" class="hover:text-green-300">Schedule</a>
+    <a href="{% url 'conference:speakers' %}" class="hover:text-green-300">Speakers</a>
+    <a href="{% url 'conference:sponsors' %}" class="hover:text-green-300">Sponsors / Jobs</a>
+    <a href="{% url 'conference:conduct' %}" class="hover:text-green-300">Conduct</a>
+    <a href="{% url 'conference:about' %}" class="hover:text-green-300">About</a>
+    <a href="{% url 'conference:schedule' %}" class="bg-green-400 text-black px-5 py-2 rounded-full font-semibold hover:bg-green-300 transition text-center">Register →</a>
+  </div>
+
+  <main class="flex-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-t border-green-800 px-6 md:px-10 py-8 text-sm text-green-400">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <p>© 2025 PyData Kampala. All rights reserved.</p>
+      <div class="flex gap-6">
+        <a href="{% url 'conference:conduct' %}" class="hover:text-white transition">Code of Conduct</a>
+        <a href="{% url 'conference:about' %}" class="hover:text-white transition">About</a>
+        <a href="{% url 'conference:sponsors' %}" class="hover:text-white transition">Sponsors</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+    toggle.addEventListener('click', () => {
+      mobileNav.classList.toggle('hidden');
+      iconOpen.classList.toggle('hidden');
+      iconClose.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
