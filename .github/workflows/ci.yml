@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     env:
       DJANGO_SECRET_KEY: ci-test-secret-key-not-for-production
