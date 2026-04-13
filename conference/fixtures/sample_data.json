@@ -1,0 +1,63 @@
+[
+  {
+    "model": "conference.speaker",
+    "pk": 1,
+    "fields": {
+      "name": "Alice Nakato",
+      "bio": "Data scientist at a Kampala startup, passionate about open data and community-driven analytics.",
+      "photo": "",
+      "twitter": "alicenakato",
+      "linkedin": "",
+      "github": "alicenakato"
+    }
+  },
+  {
+    "model": "conference.speaker",
+    "pk": 2,
+    "fields": {
+      "name": "Brian Okello",
+      "bio": "Machine learning engineer with five years of experience in NLP for low-resource African languages.",
+      "photo": "",
+      "twitter": "brianokello",
+      "linkedin": "",
+      "github": "brianokello"
+    }
+  },
+  {
+    "model": "conference.talk",
+    "pk": 1,
+    "fields": {
+      "title": "Introduction to Pandas",
+      "speaker": 1,
+      "talk_type": "talk",
+      "description": "A hands-on introduction to the pandas library for data manipulation and analysis.",
+      "slides_url": "",
+      "video_url": "",
+      "is_featured": true
+    }
+  },
+  {
+    "model": "conference.talk",
+    "pk": 2,
+    "fields": {
+      "title": "NLP for African Languages",
+      "speaker": 2,
+      "talk_type": "keynote",
+      "description": "Challenges and practical solutions for natural language processing in low-resource African languages.",
+      "slides_url": "",
+      "video_url": "",
+      "is_featured": true
+    }
+  },
+  {
+    "model": "conference.sponsor",
+    "pk": 1,
+    "fields": {
+      "name": "DataCorp Uganda",
+      "website": "https://datacorp.example.com",
+      "logo": "",
+      "tier": "gold",
+      "description": "Leading data analytics firm in East Africa, supporting open data communities."
+    }
+  }
+]
