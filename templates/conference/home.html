@@ -1,203 +1,220 @@
 {% extends "base.html" %}
 
-{% block title %}PyData Kampala 2025 – Data Science Conference{% endblock %}
+{% block title %}PyData Kampala 2025 - Data Science Conference{% endblock %}
 
 {% block content %}
+<section class="relative overflow-hidden">
+  <div class="absolute -top-20 -right-20 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-70"></div>
+  <div class="absolute top-40 -left-24 w-64 h-64 bg-cyan-100 rounded-full blur-3xl opacity-60"></div>
 
-<!-- Hero Section -->
-<section class="grid md:grid-cols-2 items-center px-6 md:px-10 py-16 md:py-24 gap-10 max-w-7xl mx-auto">
-
-  <!-- Left Content -->
+  <div class="grid md:grid-cols-2 items-center px-6 md:px-10 py-16 md:py-24 gap-10 max-w-7xl mx-auto relative">
   <div>
-    <p class="text-green-400 uppercase tracking-widest text-xs font-semibold mb-4">Kampala, Uganda</p>
+    <p class="text-blue-600 uppercase tracking-widest text-xs font-semibold mb-4">Kampala, Uganda</p>
     <h1 class="text-4xl md:text-6xl font-serif leading-tight mb-6">
       Talks, workshops,<br>
       and data sprints<br>
-      in <span class="text-green-400">Kampala</span>
+      in <span class="text-blue-600">Kampala</span>
     </h1>
 
-    <p class="text-green-200 text-lg mb-8 max-w-md">
+    <p class="text-slate-600 text-lg mb-8 max-w-md">
       Join Africa's vibrant data science community for two days of inspiring talks,
       hands-on tutorials, and networking with fellow practitioners.
     </p>
 
     <div class="flex flex-wrap items-center gap-4 mb-10">
-      <span class="text-green-300 text-base font-medium">📅 15–16 August 2025</span>
-      <span class="text-green-300 text-base font-medium">📍 Makerere University, Kampala</span>
+      <span class="text-blue-700 text-base font-medium">15-16 August 2025</span>
+      <span class="text-blue-700 text-base font-medium">Makerere University, Kampala</span>
     </div>
 
     <div class="flex flex-wrap gap-4 mb-10">
       <a href="{% url 'conference:schedule' %}"
-         class="bg-green-400 text-black px-7 py-3 rounded-full font-semibold hover:bg-green-300 transition">
-        Register Now →
+         class="bg-blue-600 text-white px-7 py-3 rounded-full font-semibold hover:bg-blue-700 transition shadow-sm">
+        Register Now ->
       </a>
-      <a href="{% url 'conference:talks' %}"
-         class="border border-green-400 text-green-300 px-7 py-3 rounded-full font-semibold hover:bg-green-900 transition">
-        View Talks
+      <a href="{% url 'conference:programs' %}"
+         class="border border-blue-300 text-blue-700 px-7 py-3 rounded-full font-semibold hover:bg-white transition">
+        Explore Programs
       </a>
     </div>
 
-    <!-- Stats bar -->
     <div class="flex flex-wrap gap-8 text-center">
       <div>
-        <p class="text-3xl font-bold text-green-400">2</p>
-        <p class="text-xs text-green-300 uppercase tracking-wide">Days</p>
+        <p class="text-3xl font-bold text-blue-400">2</p>
+        <p class="text-xs text-blue-600 uppercase tracking-wide">Days</p>
       </div>
       <div>
-        <p class="text-3xl font-bold text-green-400">30+</p>
-        <p class="text-xs text-green-300 uppercase tracking-wide">Talks</p>
+        <p class="text-3xl font-bold text-blue-400">30+</p>
+        <p class="text-xs text-blue-600 uppercase tracking-wide">Talks</p>
       </div>
       <div>
-        <p class="text-3xl font-bold text-green-400">500+</p>
-        <p class="text-xs text-green-300 uppercase tracking-wide">Attendees</p>
+        <p class="text-3xl font-bold text-blue-400">500+</p>
+        <p class="text-xs text-blue-600 uppercase tracking-wide">Attendees</p>
       </div>
       <div>
-        <p class="text-3xl font-bold text-green-400">10+</p>
-        <p class="text-xs text-green-300 uppercase tracking-wide">Workshops</p>
+        <p class="text-3xl font-bold text-blue-400">10+</p>
+        <p class="text-xs text-blue-600 uppercase tracking-wide">Workshops</p>
       </div>
     </div>
   </div>
 
-  <!-- Right Visual (Abstract Skyline inspired by DjangoCon design) -->
-  <div class="relative h-[380px] hidden md:block overflow-hidden">
-
-    <!-- Decorative grid lines -->
-    <svg class="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#4ade80" stroke-width="0.5"/>
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#grid)"/>
-    </svg>
-
-    <!-- Kampala skyline silhouette (abstract) -->
-    <div class="absolute bottom-0 left-0 right-0 flex items-end justify-center gap-1">
-      <!-- Buildings -->
-      <div class="w-8 h-20 bg-green-800 rounded-t"></div>
-      <div class="w-12 h-32 bg-green-700 rounded-t"></div>
-      <div class="w-6 h-16 bg-green-900 rounded-t"></div>
-      <div class="w-14 h-48 bg-green-600 rounded-t relative">
-        <!-- Antenna -->
-        <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 w-1 h-8 bg-green-300"></div>
+  <div class="relative">
+    {% if hero_slides %}
+    <div id="hero-slider" class="relative h-[360px] md:h-[420px] rounded-2xl overflow-hidden border border-blue-200 bg-white shadow-lg shadow-blue-100/70">
+      {% for slide in hero_slides %}
+      <div class="hero-slide absolute inset-0 {% if not forloop.first %}hidden{% endif %}">
+        <img src="{{ slide.image.url }}" alt="{{ slide.title }}" class="w-full h-full object-cover opacity-90">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-800/20 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+          <h2 class="text-xl md:text-2xl font-semibold text-white">{{ slide.title }}</h2>
+          {% if slide.subtitle %}
+          <p class="text-blue-200 mt-2">{{ slide.subtitle }}</p>
+          {% endif %}
+          {% if slide.cta_url and slide.cta_label %}
+          <a href="{{ slide.cta_url }}" class="inline-block mt-4 bg-blue-400 hover:bg-blue-300 text-white px-4 py-2 rounded-full text-sm font-semibold">
+            {{ slide.cta_label }}
+          </a>
+          {% endif %}
+        </div>
       </div>
-      <div class="w-10 h-36 bg-green-800 rounded-t"></div>
-      <div class="w-16 h-52 bg-green-500 rounded-t"></div>
-      <div class="w-8 h-28 bg-green-700 rounded-t"></div>
-      <div class="w-20 h-40 bg-green-900 rounded-t relative">
-        <!-- Dome -->
-        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-10 h-8 bg-green-400 rounded-t-full"></div>
+      {% endfor %}
+
+      <div class="absolute bottom-4 right-4 flex items-center gap-2">
+        <button id="hero-prev" class="bg-white/90 text-blue-700 border border-blue-200 px-3 py-1 rounded-full text-sm hover:bg-blue-50">Prev</button>
+        <button id="hero-next" class="bg-white/90 text-blue-700 border border-blue-200 px-3 py-1 rounded-full text-sm hover:bg-blue-50">Next</button>
       </div>
-      <div class="w-10 h-24 bg-green-800 rounded-t"></div>
-      <div class="w-6 h-44 bg-green-600 rounded-t"></div>
-      <div class="w-12 h-30 bg-green-700 rounded-t"></div>
     </div>
-
-    <!-- Data scatter dots overlay -->
-    <div class="absolute inset-0">
-      <div class="absolute top-10 left-8 w-2 h-2 bg-green-400 rounded-full opacity-70"></div>
-      <div class="absolute top-20 left-20 w-3 h-3 bg-green-300 rounded-full opacity-50"></div>
-      <div class="absolute top-5 left-40 w-2 h-2 bg-green-500 rounded-full opacity-80"></div>
-      <div class="absolute top-14 right-20 w-2 h-2 bg-green-400 rounded-full opacity-60"></div>
-      <div class="absolute top-32 left-12 w-1 h-1 bg-green-300 rounded-full opacity-90"></div>
-      <div class="absolute top-8 right-40 w-3 h-3 bg-green-400 rounded-full opacity-40"></div>
-      <div class="absolute top-40 left-32 w-2 h-2 bg-green-500 rounded-full opacity-70"></div>
-      <div class="absolute top-24 right-12 w-1 h-1 bg-green-300 rounded-full opacity-80"></div>
+    {% else %}
+    <div class="h-[360px] md:h-[420px] rounded-2xl border border-dashed border-blue-300 bg-blue-50 flex items-center justify-center p-8 text-center">
+      <div>
+        <p class="text-blue-700 text-lg font-semibold">Add 4 hero pictures from admin</p>
+        <p class="text-blue-400 text-sm mt-2">Go to Admin -> Hero slides and create at least four active slides.</p>
+      </div>
     </div>
-
-    <!-- Connecting lines (network graph) -->
-    <svg class="absolute inset-0 w-full h-full opacity-30" xmlns="http://www.w3.org/2000/svg">
-      <line x1="50" y1="40" x2="160" y2="20" stroke="#4ade80" stroke-width="1"/>
-      <line x1="160" y1="20" x2="280" y2="55" stroke="#4ade80" stroke-width="1"/>
-      <line x1="280" y1="55" x2="350" y2="35" stroke="#4ade80" stroke-width="1"/>
-      <line x1="50" y1="100" x2="160" y2="20" stroke="#4ade80" stroke-width="1"/>
-      <line x1="160" y1="20" x2="130" y2="80" stroke="#4ade80" stroke-width="1"/>
-    </svg>
+    {% endif %}
   </div>
-
+  </div>
 </section>
 
-<!-- Featured Talks Section -->
+{% if programs %}
+<section class="px-6 md:px-10 py-14 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-end mb-8 gap-4">
+      <div>
+        <h2 class="text-3xl font-serif">Programs</h2>
+        <p class="text-blue-700 mt-2">Explore tracks and submit to the call for proposals.</p>
+      </div>
+      <a href="{% url 'conference:programs' %}" class="text-blue-700 hover:text-blue-900 text-sm">See all programs -></a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      {% for program in programs %}
+      <div class="bg-white border border-blue-100 rounded-xl p-6 shadow-md shadow-blue-50">
+        <h3 class="text-xl font-semibold mb-2">{{ program.title }}</h3>
+        <p class="text-slate-600 text-sm mb-4">{{ program.summary }}</p>
+        <div class="flex flex-wrap gap-3">
+          <a href="{% url 'conference:program_detail' program.slug %}" class="border border-blue-300 text-blue-700 px-4 py-2 rounded-full text-xs hover:bg-blue-50 transition">Program Details</a>
+          <a href="{% url 'conference:program_proposals' program.slug %}" class="bg-blue-500 text-white px-4 py-2 rounded-full text-xs hover:bg-blue-600 transition">Call for Proposals</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if latest_posts %}
+<section class="px-6 md:px-10 py-14 bg-gradient-to-b from-white to-blue-50/30">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-end mb-8 gap-4">
+      <div>
+        <h2 class="text-3xl font-serif">From the Blog</h2>
+        <p class="text-blue-700 mt-2">Announcements and stories from the community.</p>
+      </div>
+      <a href="{% url 'conference:blog' %}" class="text-blue-700 hover:text-blue-900 text-sm">Read all posts -></a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      {% for post in latest_posts %}
+      <a href="{% url 'conference:blog_detail' post.slug %}" class="bg-white border border-blue-100 rounded-xl p-6 hover:border-blue-300 transition group shadow-md shadow-blue-50">
+        <h3 class="text-lg font-semibold mb-3 group-hover:text-blue-700">{{ post.title }}</h3>
+        <p class="text-slate-600 text-sm mb-3">{{ post.excerpt }}</p>
+        <p class="text-blue-600 text-xs">{{ post.published_at|date:"M j, Y" }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
 {% if featured_talks %}
-<section class="px-6 md:px-10 py-16 bg-green-900/30">
+<section class="px-6 md:px-10 py-16 bg-blue-50/80">
   <div class="max-w-6xl mx-auto">
     <h2 class="text-3xl font-serif mb-2">Featured Talks</h2>
-    <p class="text-green-300 mb-10">Highlights from our programme</p>
+    <p class="text-blue-700 mb-10">Highlights from our programme</p>
 
     <div class="grid md:grid-cols-3 gap-6">
       {% for talk in featured_talks %}
       <a href="{% url 'conference:talk_detail' talk.pk %}"
-         class="bg-green-900/60 border border-green-700 rounded-xl p-6 hover:border-green-400 transition group">
-        <span class="inline-block text-xs font-semibold uppercase tracking-wider text-green-400 bg-green-900 px-2 py-0.5 rounded mb-3">
+         class="bg-white border border-blue-100 rounded-xl p-6 hover:border-blue-300 transition group shadow-md shadow-blue-50">
+        <span class="inline-block text-xs font-semibold uppercase tracking-wider text-blue-600 bg-blue-100 px-2 py-0.5 rounded mb-3">
           {{ talk.get_talk_type_display }}
         </span>
-        <h3 class="text-lg font-semibold mb-2 group-hover:text-green-300 transition">{{ talk.title }}</h3>
-        <p class="text-green-300 text-sm">{{ talk.speaker.name }}</p>
-        <p class="text-green-500 text-xs mt-3 line-clamp-3">{{ talk.description }}</p>
+        <h3 class="text-lg font-semibold mb-2 group-hover:text-blue-700 transition">{{ talk.title }}</h3>
+        <p class="text-blue-700 text-sm">{{ talk.speaker.name }}</p>
+        <p class="text-slate-600 text-xs mt-3 line-clamp-3">{{ talk.description }}</p>
       </a>
       {% endfor %}
-    </div>
-
-    <div class="mt-8 text-center">
-      <a href="{% url 'conference:talks' %}"
-         class="border border-green-400 text-green-300 px-6 py-2 rounded-full hover:bg-green-900 transition text-sm">
-        See all talks →
-      </a>
     </div>
   </div>
 </section>
 {% endif %}
 
-<!-- Sponsors Section -->
-{% if sponsors %}
 <section class="px-6 md:px-10 py-16">
   <div class="max-w-6xl mx-auto text-center">
     <h2 class="text-3xl font-serif mb-2">Our Sponsors</h2>
-    <p class="text-green-300 mb-10">Thank you to the organisations making PyData Kampala possible</p>
+    <p class="text-blue-700 mb-10">Thank you to the organisations making PyData Kampala possible</p>
 
+    {% if sponsors %}
     <div class="flex flex-wrap justify-center items-center gap-8">
       {% for sponsor in sponsors %}
       <a href="{{ sponsor.website }}" target="_blank" rel="noopener noreferrer"
-         class="bg-green-900/50 border border-green-700 rounded-lg px-6 py-4 hover:border-green-400 transition text-center min-w-[140px]">
+         class="bg-white border border-blue-100 rounded-lg px-6 py-4 hover:border-blue-300 transition text-center min-w-[140px] shadow-md shadow-blue-50">
         {% if sponsor.logo %}
           <img src="{{ sponsor.logo.url }}" alt="{{ sponsor.name }}" class="h-10 mx-auto object-contain mb-2">
         {% else %}
-          <p class="font-semibold text-green-200">{{ sponsor.name }}</p>
+          <p class="font-semibold text-blue-700">{{ sponsor.name }}</p>
         {% endif %}
-        <span class="text-xs text-green-400 uppercase tracking-wide">{{ sponsor.get_tier_display }}</span>
+        <span class="text-xs text-blue-400 uppercase tracking-wide">{{ sponsor.get_tier_display }}</span>
       </a>
       {% endfor %}
     </div>
-
-    <div class="mt-8">
-      <a href="{% url 'conference:sponsors' %}"
-         class="border border-green-400 text-green-300 px-6 py-2 rounded-full hover:bg-green-900 transition text-sm">
-        Become a sponsor →
-      </a>
+    {% else %}
+    <div class="bg-white border border-blue-100 rounded-2xl p-10 max-w-2xl mx-auto shadow-md shadow-blue-50">
+      <p class="text-slate-700 mb-5">Sponsor logos will appear here once published from admin.</p>
+      <a href="mailto:sponsor@pydatakampala.org" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition">Become a sponsor</a>
     </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- Call to Action -->
-<section class="px-6 md:px-10 py-20 bg-green-900/40">
-  <div class="max-w-2xl mx-auto text-center">
-    <h2 class="text-3xl md:text-4xl font-serif mb-4">Ready to join the community?</h2>
-    <p class="text-green-300 mb-8">
-      PyData Kampala brings together data scientists, analysts, engineers, and enthusiasts
-      from across East Africa and beyond.
-    </p>
-    <div class="flex flex-wrap justify-center gap-4">
-      <a href="{% url 'conference:schedule' %}"
-         class="bg-green-400 text-black px-8 py-3 rounded-full font-semibold hover:bg-green-300 transition">
-        Get your ticket →
-      </a>
-      <a href="{% url 'conference:about' %}"
-         class="border border-green-400 text-green-300 px-8 py-3 rounded-full font-semibold hover:bg-green-900 transition">
-        Learn more
-      </a>
-    </div>
+    {% endif %}
   </div>
 </section>
 
+<script>
+  (function () {
+    const slides = document.querySelectorAll('.hero-slide');
+    const nextBtn = document.getElementById('hero-next');
+    const prevBtn = document.getElementById('hero-prev');
+    if (!slides.length || !nextBtn || !prevBtn) return;
+
+    let index = 0;
+    const showSlide = (newIndex) => {
+      slides[index].classList.add('hidden');
+      index = (newIndex + slides.length) % slides.length;
+      slides[index].classList.remove('hidden');
+    };
+
+    nextBtn.addEventListener('click', () => showSlide(index + 1));
+    prevBtn.addEventListener('click', () => showSlide(index - 1));
+
+    setInterval(() => showSlide(index + 1), 5000);
+  })();
+</script>
 {% endblock %}

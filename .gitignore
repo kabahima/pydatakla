@@ -22,7 +22,7 @@ media/
 venv/
 env/
 .env
-
+vvenv/
 # OS
 .DS_Store
 Thumbs.db

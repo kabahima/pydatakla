@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ program.title }} - Program{% endblock %}
+
+{% block content %}
+<section class="px-6 md:px-10 py-16 max-w-4xl mx-auto">
+  <a href="{% url 'conference:programs' %}" class="text-blue-400 hover:text-blue-300 text-sm inline-flex items-center mb-6">
+    <- Back to programs
+  </a>
+
+  <h1 class="text-4xl font-serif mb-3">{{ program.title }}</h1>
+  <p class="text-blue-300 mb-6">{{ program.summary }}</p>
+
+  <p class="text-blue-500 text-sm mb-8">
+    {% if program.start_date %}{{ program.start_date|date:"M j, Y" }}{% endif %}
+    {% if program.end_date %} - {{ program.end_date|date:"M j, Y" }}{% endif %}
+    {% if program.venue %} | {{ program.venue }}{% endif %}
+  </p>
+
+  <div class="text-blue-100 leading-relaxed whitespace-pre-line mb-10">{{ program.description }}</div>
+
+  <div class="bg-blue-900/40 border border-blue-700 rounded-xl p-6">
+    <div class="flex flex-wrap justify-between items-center gap-4 mb-4">
+      <h2 class="text-2xl font-semibold">Call for Proposals</h2>
+      <a href="{% url 'conference:program_proposals' program.slug %}" class="bg-blue-400 text-white px-4 py-2 rounded-full text-xs hover:bg-blue-300 transition">View all CFP links</a>
+    </div>
+
+    {% with proposals=program.proposals.all %}
+    {% if proposals %}
+    <ul class="space-y-3">
+      {% for proposal in proposals %}
+      <li class="border border-blue-800 rounded-lg p-4">
+        <div class="flex flex-wrap justify-between gap-2">
+          <p class="font-semibold">{{ proposal.title }}</p>
+          {% if proposal.is_open %}
+          <span class="text-xs bg-green-800/50 text-green-300 px-2 py-0.5 rounded">Open</span>
+          {% else %}
+          <span class="text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Closed</span>
+          {% endif %}
+        </div>
+        <p class="text-blue-200 text-sm mt-2">{{ proposal.description }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-blue-300 text-sm">No call-for-proposal entries yet for this program.</p>
+    {% endif %}
+    {% endwith %}
+  </div>
+</section>
+{% endblock %}

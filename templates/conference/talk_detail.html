@@ -4,35 +4,35 @@
 
 {% block content %}
 <section class="px-6 md:px-10 py-16 max-w-4xl mx-auto">
-  <a href="{% url 'conference:talks' %}" class="text-green-400 hover:text-green-300 text-sm mb-6 inline-flex items-center gap-1">
+  <a href="{% url 'conference:talks' %}" class="text-blue-400 hover:text-blue-300 text-sm mb-6 inline-flex items-center gap-1">
     ← Back to talks
   </a>
 
-  <span class="inline-block text-xs font-semibold uppercase tracking-wider text-green-400 bg-green-900 px-2 py-0.5 rounded mb-4">
+  <span class="inline-block text-xs font-semibold uppercase tracking-wider text-blue-400 bg-blue-900 px-2 py-0.5 rounded mb-4">
     {{ talk.get_talk_type_display }}
   </span>
   <h1 class="text-3xl md:text-4xl font-serif mb-4">{{ talk.title }}</h1>
 
   <div class="flex items-center gap-3 mb-8">
     <div>
-      <p class="font-semibold text-green-200">{{ talk.speaker.name }}</p>
+      <p class="font-semibold text-blue-200">{{ talk.speaker.name }}</p>
     </div>
   </div>
 
-  <div class="prose prose-invert max-w-none text-green-100 leading-relaxed mb-8">
+  <div class="prose prose-invert max-w-none text-blue-100 leading-relaxed mb-8">
     <p>{{ talk.description }}</p>
   </div>
 
   <div class="flex flex-wrap gap-4">
     {% if talk.slides_url %}
     <a href="{{ talk.slides_url }}" target="_blank" rel="noopener noreferrer"
-       class="border border-green-400 text-green-300 px-5 py-2 rounded-full text-sm hover:bg-green-900 transition">
+       class="border border-blue-400 text-blue-300 px-5 py-2 rounded-full text-sm hover:bg-blue-900 transition">
       📄 View Slides
     </a>
     {% endif %}
     {% if talk.video_url %}
     <a href="{{ talk.video_url }}" target="_blank" rel="noopener noreferrer"
-       class="border border-green-400 text-green-300 px-5 py-2 rounded-full text-sm hover:bg-green-900 transition">
+       class="border border-blue-400 text-blue-300 px-5 py-2 rounded-full text-sm hover:bg-blue-900 transition">
       ▶ Watch Video
     </a>
     {% endif %}
