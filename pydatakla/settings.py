@@ -27,7 +27,13 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-t=yxnmyqj-1er@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0").split(",")
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1,0.0.0.0"
+).split(",")
+
+# Always allow Vercel deployment domains
+ALLOWED_HOSTS += [".vercel.app", ".now.sh"]
 
 
 # Application definition
@@ -39,11 +45,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "cloudinary_storage",
-    "cloudinary",
     "conference",
     "portal",
 ]
+
+# Add cloudinary apps only when CLOUDINARY_URL is configured
+if os.environ.get("CLOUDINARY_URL"):
+    INSTALLED_APPS.insert(6, "cloudinary_storage")
+    INSTALLED_APPS.insert(7, "cloudinary")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -122,7 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [d for d in [BASE_DIR / "static"] if d.exists()]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = '/media/'
@@ -130,20 +139,33 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Cloudinary — reads CLOUDINARY_URL env var automatically
 # Format: cloudinary://api_key:api_secret@cloud_name
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+_cloudinary_url = os.environ.get("CLOUDINARY_URL", "")
+if _cloudinary_url:
+    STORAGES = {
+        "default": {
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
 # Security (production)
+# Note: SECURE_SSL_REDIRECT is intentionally off — Vercel handles SSL at the
+# edge and forwards plain HTTP to the Lambda, so redirecting would loop.
 if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 
