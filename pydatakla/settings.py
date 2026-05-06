@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
-import dj_database_url
 from pathlib import Path
+from urllib.parse import parse_qs, unquote, urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -88,19 +88,35 @@ WSGI_APPLICATION = "pydatakla.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+def database_config_from_url(database_url):
+    parsed_url = urlparse(database_url)
+    query = parse_qs(parsed_url.query)
+
+    options = {
+        "connect_timeout": 10,
+        "keepalives": 1,
+        "keepalives_idle": 30,
+    }
+    for key in ("sslmode", "application_name"):
+        if key in query and query[key]:
+            options[key] = query[key][0]
+
+    return {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": parsed_url.path.lstrip("/"),
+        "USER": unquote(parsed_url.username or ""),
+        "PASSWORD": unquote(parsed_url.password or ""),
+        "HOST": parsed_url.hostname or "",
+        "PORT": parsed_url.port or "",
+        "CONN_MAX_AGE": 300,
+        "ATOMIC_REQUESTS": True,
+        "OPTIONS": options,
+    }
+
+
 # On Vercel with Neon, DATABASE_URL must be set. Locally, uses SQLite.
 if os.environ.get("DATABASE_URL"):
-    DATABASES = {
-        "default": dj_database_url.config(
-            conn_max_age=300, 
-            OPTIONS={
-                "connect_timeout": 10,
-                "keepalives": 1,
-                "keepalives_idle": 30,
-            },
-        )
-    }
-    DATABASES["default"]["ATOMIC_REQUESTS"] = True
+    DATABASES = {"default": database_config_from_url(os.environ["DATABASE_URL"])}
 else:
     DATABASES = {
         "default": {
