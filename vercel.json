@@ -1,7 +1,7 @@
 {
   "builds": [
     {
-      "src": "pydatakla/wsgi.py",
+      "src": "api/index.py",
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
     },
@@ -18,7 +18,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "pydatakla/wsgi.py"
+      "dest": "api/index.py"
     }
   ]
 }
