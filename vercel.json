@@ -8,6 +8,14 @@
   ],
   "routes": [
     {
+      "src": "/favicon\\.png",
+      "status": 404
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "api/index.py"
     }

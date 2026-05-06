@@ -23,4 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('conference.urls', namespace='conference')),
     path('portal/', include('portal.urls', namespace='portal')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# Only serve static/media files in development or when not on Vercel
+import os
+if not os.environ.get('VERCEL'):
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
