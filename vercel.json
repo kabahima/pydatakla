@@ -1,19 +1,30 @@
 {
+  "buildCommand": "python manage.py collectstatic --noinput",
+  "devCommand": "python manage.py runserver",
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "pydatakla.settings"
+  },
   "builds": [
     {
       "src": "api/index.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.12"
+      }
     }
   ],
   "routes": [
     {
-      "src": "/favicon\\.png",
-      "status": 404
+      "src": "/static/(.*)",
+      "dest": "/static/$1",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
     },
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
+      "src": "/favicon.ico",
+      "status": 404
     },
     {
       "src": "/(.*)",

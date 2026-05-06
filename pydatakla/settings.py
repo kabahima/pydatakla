@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-t=yxnmyqj-1er@8w+9o7&1^eyvdhtsh517=55e!+m0lc+xj0om")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
@@ -33,7 +33,7 @@ ALLOWED_HOSTS = os.environ.get(
 ).split(",")
 
 # Always allow Vercel deployment domains
-ALLOWED_HOSTS += [".vercel.app", ".now.sh"]
+ALLOWED_HOSTS += [".vercel.app", ".now.sh", "*.vercel.app"]
 
 
 # Application definition
@@ -88,12 +88,26 @@ WSGI_APPLICATION = "pydatakla.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,
-    )
-}
+# On Vercel with Neon, DATABASE_URL must be set. Locally, uses SQLite.
+if os.environ.get("DATABASE_URL"):
+    DATABASES = {
+        "default": dj_database_url.config(
+            conn_max_age=300,  # 5 min for serverless
+            atomic_requests=True,
+            OPTIONS={
+                "connect_timeout": 10,
+                "keepalives": 1,
+                "keepalives_idle": 30,
+            },
+        )
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
@@ -130,10 +144,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [d for d in [BASE_DIR / "static"] if d.exists()]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 WHITENOISE_ROOT = BASE_DIR / "static"
+WHITENOISE_AUTOREFRESH = DEBUG
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

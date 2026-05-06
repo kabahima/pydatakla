@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import os
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -25,8 +26,6 @@ urlpatterns = [
     path('portal/', include('portal.urls', namespace='portal')),
 ]
 
-# Only serve static/media files in development or when not on Vercel
-import os
-if not os.environ.get('VERCEL'):
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# Serve media files in development or when not using cloud storage
+if settings.DEBUG or not os.environ.get("CLOUDINARY_URL"):
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
