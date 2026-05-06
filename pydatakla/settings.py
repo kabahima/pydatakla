@@ -58,11 +58,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "conference",
     "portal",
+    "shop",
 ]
 
 # Add cloudinary apps only when CLOUDINARY_URL is configured correctly
 _cloudinary_url = os.environ.get("CLOUDINARY_URL", "")
-if _cloudinary_url.startswith("cloudinary://"):
+if _cloudinary_url and _cloudinary_url.startswith("cloudinary://"):
     INSTALLED_APPS.insert(6, "cloudinary_storage")
     INSTALLED_APPS.insert(7, "cloudinary")
 
@@ -173,7 +174,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Cloudinary — reads CLOUDINARY_URL env var automatically
 # Format: cloudinary://api_key:api_secret@cloud_name
-if _cloudinary_url.startswith("cloudinary://"):
+if _cloudinary_url and _cloudinary_url.startswith("cloudinary://"):
     STORAGES = {
         "default": {
             "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",

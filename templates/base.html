@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}PyData Kampala{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>
     tailwind.config = {
       theme: {
@@ -22,40 +23,44 @@
 {% load static %}
 
   <!-- Navbar -->
-  <header class="sticky top-0 z-30 flex items-center justify-between px-6 md:px-10 py-5 border-b border-blue-100 bg-white/95 backdrop-blur-sm">
-    <a href="{% url 'conference:home' %}" class="flex items-center gap-2">
-      <img src="{% static 'pydata.jpg' %}" alt="PyData Kampala" class="h-12 w-auto object-contain">
-    </a>
+  <header class="sticky top-0 z-30 border-b border-blue-100 bg-white/95 backdrop-blur-sm">
+    <div class="flex items-center justify-between px-6 md:px-10 py-5">
+      <!-- Logo -->
+      <a href="{% url 'conference:home' %}" class="flex items-center gap-2">
+        <img src="{% static 'pydata.jpg' %}" alt="PyData Kampala" class="h-12 w-auto object-contain">
+      </a>
 
-    <!-- Mobile menu toggle -->
-    <button id="menu-toggle" class="md:hidden text-blue-300 focus:outline-none">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-        <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-      </svg>
-    </button>
+      <!-- Mobile menu toggle -->
+      <button id="menu-toggle" class="md:hidden text-blue-300 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
 
-    <nav id="nav-links" class="hidden md:flex gap-6 text-sm font-medium text-slate-700">
-      <a href="{% url 'conference:about' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'about' %}text-blue-700{% endif %}">About</a>
-      <a href="{% url 'conference:schedule' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'schedule' or request.resolver_match.url_name == 'talks' or request.resolver_match.url_name == 'talk_detail' or request.resolver_match.url_name == 'speakers' %}text-blue-700{% endif %}">Events</a>
-      <a href="{% url 'conference:meetups' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'meetups' or request.resolver_match.url_name == 'meetup_detail' %}text-blue-700{% endif %}">Meetups</a>
-      <a href="{% url 'conference:projects' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'projects' %}text-blue-700{% endif %}">Projects</a>
-      <a href="{% url 'conference:conduct' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'conduct' %}text-blue-700{% endif %}">Code of Conduct</a>
-    </nav>
+      <!-- Desktop Navigation -->
+      <nav id="nav-links" class="hidden md:flex gap-6 text-sm font-medium text-slate-700 items-center">
+        <a href="{% url 'conference:about' %}" class="hover:text-blue-700 transition">About</a>
+        <a href="{% url 'conference:schedule' %}" class="hover:text-blue-700 transition">Events</a>
+        <a href="{% url 'conference:projects' %}" class="hover:text-blue-700 transition">Projects</a>
+        <a href="{% url 'conference:conduct' %}" class="hover:text-blue-700 transition">Code of Conduct</a>
+        <a href="{% url 'shop:shop' %}" class="hover:text-blue-700 transition">Merch / Shop</a>
+      </nav>
 
-    <a href="{% url 'conference:schedule' %}"
-       class="hidden md:inline-block bg-blue-600 text-white px-5 py-2 rounded-full font-semibold hover:bg-blue-700 transition text-sm shadow-sm">
-      Register →
-    </a>
+      <!-- Register Button -->
+      <a href="{% url 'conference:schedule' %}" class="hidden md:inline-block bg-blue-600 text-white px-5 py-2 rounded-full font-semibold hover:bg-blue-700 transition text-sm shadow-sm">
+        Register →
+      </a>
+    </div>
   </header>
 
   <!-- Mobile nav drawer -->
   <div id="mobile-nav" class="hidden md:hidden bg-blue-50 px-6 py-4 flex flex-col gap-4 text-sm font-medium text-slate-700 border-b border-blue-100">
     <a href="{% url 'conference:about' %}" class="hover:text-blue-700">About</a>
     <a href="{% url 'conference:schedule' %}" class="hover:text-blue-700">Events</a>
-    <a href="{% url 'conference:meetups' %}" class="hover:text-blue-700">Meetups</a>
     <a href="{% url 'conference:projects' %}" class="hover:text-blue-700">Projects</a>
     <a href="{% url 'conference:conduct' %}" class="hover:text-blue-700">Code of Conduct</a>
+    <a href="{% url 'shop:shop' %}" class="hover:text-blue-700">Merch / Shop</a>
     <a href="{% url 'conference:schedule' %}" class="bg-blue-600 text-white px-5 py-2 rounded-full font-semibold hover:bg-blue-700 transition text-center">Register →</a>
   </div>
 
@@ -65,7 +70,7 @@
 
   <footer class="border-t border-blue-100 px-6 md:px-10 py-8 text-sm text-blue-600 bg-blue-50/50">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-      <p>© 2025 PyData Kampala. All rights reserved.</p>
+      <p>© {% now "Y" %} PyData Kampala. All rights reserved. Powered by <a href="https://www.djangoproject.com/" target="_blank" rel="noopener noreferrer" class="underline decoration-dotted hover:text-blue-800 transition">Django</a>.</p>
       <div class="flex gap-6">
         <a href="{% url 'conference:conduct' %}" class="hover:text-blue-800 transition">Code of Conduct</a>
         <a href="{% url 'conference:about' %}" class="hover:text-blue-800 transition">About</a>
@@ -85,5 +90,7 @@
       iconClose.classList.toggle('hidden');
     });
   </script>
+
+  {% block extra_scripts %}{% endblock %}
 </body>
 </html>

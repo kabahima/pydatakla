@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Order Confirmation{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto py-8 text-center">
+  <h1 class="text-2xl font-semibold mb-4">Thank you — your order is placed</h1>
+  <p class="mb-4">Order #{{ order.pk }} — <strong>${{ order.total }}</strong></p>
+
+  {% if whatsapp_link %}
+    <p class="mb-2"><a href="{{ whatsapp_link }}" target="_blank" class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a></p>
+  {% endif %}
+
+  <p class="mb-2"><a href="{{ mailto }}" class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded"><i class="fas fa-envelope"></i> Send order by email</a></p>
+
+  <p class="mt-6 text-sm text-slate-500">We'll contact you to confirm payment and shipping details.</p>
+</div>
+{% endblock %}

@@ -17,6 +17,7 @@ def home(request):
     programs = Program.objects.filter(is_active=True).prefetch_related('proposals')[:3]
     gallery_photos = GalleryPhoto.objects.filter(is_active=True).order_by('order')[:6]
     upcoming_meetups = Meetup.objects.filter(is_published=True, date__gte=today).order_by('date', 'time')[:3]
+    next_meetup = upcoming_meetups.first()
     return render(request, 'conference/home.html', {
         'featured_talks': featured_talks,
         'sponsors': sponsors,
@@ -26,6 +27,7 @@ def home(request):
         'conf': ConferenceInfo.get(),
         'gallery_photos': gallery_photos,
         'upcoming_meetups': upcoming_meetups,
+        'next_meetup': next_meetup,
     })
 
 

@@ -3,21 +3,21 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Count
+from cloudinary.exceptions import Error as CloudinaryError
 
 from conference.models import (
     Speaker, Talk, ScheduleSlot, Sponsor, JobPosting,
     HeroSlide, BlogPost, Program, CallForProposal, ConferenceInfo,
     GalleryPhoto, Meetup, Project, SponsorApplication,
 )
+from shop.models import Category, Product, Cart, CartItem, Order
+from shop.forms import ProductForm, CategoryForm
 from .forms import (
     SpeakerForm, TalkForm, ScheduleSlotForm, SponsorForm, JobPostingForm,
     HeroSlideForm, BlogPostForm, ProgramForm, CallForProposalForm, ConferenceInfoForm,
     GalleryPhotoForm, MeetupForm, ProjectForm,
 )
-
 staff_required = user_passes_test(lambda u: u.is_staff, login_url='portal:login')
-
-
 def portal_login(request):
     if request.user.is_authenticated and request.user.is_staff:
         return redirect('portal:dashboard')
@@ -53,6 +53,21 @@ def dashboard(request):
         'projects': Project.objects.count(),
         'gallery': GalleryPhoto.objects.count(),
     }
+    
+    # Shop stats (with error handling in case tables don't exist yet)
+    try:
+        stats['products'] = Product.objects.count()
+        stats['categories'] = Category.objects.count()
+        stats['active_carts'] = Cart.objects.count()
+        stats['orders'] = Order.objects.count()
+        stats['new_orders'] = Order.objects.filter(status='new').count()
+    except Exception:
+        stats['products'] = 0
+        stats['categories'] = 0
+        stats['active_carts'] = 0
+        stats['orders'] = 0
+        stats['new_orders'] = 0
+    
     recent_posts = BlogPost.objects.order_by('-created_at')[:5]
     return render(request, 'portal/dashboard.html', {'stats': stats, 'recent_posts': recent_posts})
 
@@ -69,9 +84,13 @@ def _list_view(request, model, template, order_by=None):
 def _create_view(request, form_class, template, redirect_name):
     form = form_class(request.POST or None, request.FILES or None)
     if form.is_valid():
-        form.save()
-        messages.success(request, 'Created successfully.')
-        return redirect(redirect_name)
+        try:
+            form.save()
+        except CloudinaryError:
+            form.add_error(None, 'Image upload failed. Check your Cloudinary credentials and try again.')
+        else:
+            messages.success(request, 'Created successfully.')
+            return redirect(redirect_name)
     return render(request, template, {'form': form, 'action': 'Create'})
 
 
@@ -79,9 +98,13 @@ def _edit_view(request, form_class, template, redirect_name, pk):
     obj = get_object_or_404(form_class.Meta.model, pk=pk)
     form = form_class(request.POST or None, request.FILES or None, instance=obj)
     if form.is_valid():
-        form.save()
-        messages.success(request, 'Updated successfully.')
-        return redirect(redirect_name)
+        try:
+            form.save()
+        except CloudinaryError:
+            form.add_error(None, 'Image upload failed. Check your Cloudinary credentials and try again.')
+        else:
+            messages.success(request, 'Updated successfully.')
+            return redirect(redirect_name)
     return render(request, template, {'form': form, 'action': 'Edit', 'object': obj})
 
 
@@ -410,3 +433,62 @@ def sponsor_application_update(request, pk):
             app.save()
             messages.success(request, f'Application marked as {new_status}.')
     return redirect('portal:sponsor_applications')
+
+
+# ── Shop Management ───────────────────────────────────────────────────────────
+
+@login_required(login_url='portal:login')
+@staff_required
+def product_list(request):
+    products = Product.objects.select_related('category').order_by('-created_at')
+    return render(request, 'portal/products.html', {'objects': products})
+
+
+@login_required(login_url='portal:login')
+@staff_required
+def category_list(request):
+    categories = Category.objects.annotate(product_count=Count('products')).order_by('name')
+    return render(request, 'portal/categories.html', {'objects': categories})
+
+
+@login_required(login_url='portal:login')
+@staff_required
+def product_create(request):
+    return _create_view(request, ProductForm, 'portal/form.html', 'portal:product_list')
+
+
+@login_required(login_url='portal:login')
+@staff_required
+def product_edit(request, pk):
+    return _edit_view(request, ProductForm, 'portal/form.html', 'portal:product_list', pk)
+
+
+@login_required(login_url='portal:login')
+@staff_required
+def product_delete(request, pk):
+    return _delete_view(request, Product, 'portal:product_list', pk)
+
+
+@login_required(login_url='portal:login')
+@staff_required
+def category_create(request):
+    return _create_view(request, CategoryForm, 'portal/form.html', 'portal:category_list')
+
+
+@login_required(login_url='portal:login')
+@staff_required
+def category_edit(request, pk):
+    return _edit_view(request, CategoryForm, 'portal/form.html', 'portal:category_list', pk)
+
+
+@login_required(login_url='portal:login')
+@staff_required
+def category_delete(request, pk):
+    return _delete_view(request, Category, 'portal:category_list', pk)
+
+
+@login_required(login_url='portal:login')
+@staff_required
+def order_list(request):
+    orders = Order.objects.order_by('-created_at')
+    return render(request, 'portal/orders.html', {'objects': orders})

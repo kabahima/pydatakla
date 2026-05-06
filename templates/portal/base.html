@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Management Portal{% endblock %} — PyData Kampala</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-100 min-h-screen flex">
 
@@ -16,52 +17,62 @@
     </div>
     <nav class="flex-1 px-3 py-4 space-y-1 text-sm overflow-y-auto">
       <a href="{% url 'portal:dashboard' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if request.resolver_match.url_name == 'dashboard' %}bg-slate-700 text-white{% endif %}">
-        <span>📊</span> Dashboard
+        <i class="fas fa-chart-line text-blue-400"></i> Dashboard
       </a>
       <a href="{% url 'portal:conference_info' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if request.resolver_match.url_name == 'conference_info' %}bg-slate-700 text-white{% endif %}">
-        <span>🏠</span> Home Page
+        <i class="fas fa-home text-blue-400"></i> Home Page
       </a>
       <p class="px-3 pt-3 pb-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">Content</p>
       <a href="{% url 'portal:post_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'post' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>📝</span> Blog Posts
+        <i class="fas fa-newspaper"></i> Blog Posts
       </a>
       <a href="{% url 'portal:slide_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'slide' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>🖼️</span> Hero Slides
+        <i class="fas fa-images"></i> Hero Slides
       </a>
       <a href="{% url 'portal:gallery_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'gallery' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>📸</span> Gallery
+        <i class="fas fa-image"></i> Gallery
       </a>
       <a href="{% url 'portal:meetup_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'meetup' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>📍</span> Meetups
+        <i class="fas fa-map-marker-alt"></i> Meetups
       </a>
       <a href="{% url 'portal:project_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'project' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>🛠️</span> Projects
+        <i class="fas fa-tools"></i> Projects
       </a>
       <p class="px-3 pt-3 pb-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">Conference</p>
       <a href="{% url 'portal:speaker_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'speaker' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>🎤</span> Speakers
+        <i class="fas fa-microphone"></i> Speakers
       </a>
       <a href="{% url 'portal:talk_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'talk' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>💬</span> Talks
+        <i class="fas fa-comments"></i> Talks
       </a>
       <a href="{% url 'portal:slot_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'slot' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>🗓️</span> Schedule
+        <i class="fas fa-calendar-alt"></i> Schedule
       </a>
       <a href="{% url 'portal:program_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'program' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>📋</span> Programs
+        <i class="fas fa-list-check"></i> Programs
       </a>
       <a href="{% url 'portal:proposal_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'proposal' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>📨</span> CFPs
+        <i class="fas fa-envelope"></i> CFPs
       </a>
       <p class="px-3 pt-3 pb-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">Sponsors</p>
       <a href="{% url 'portal:sponsor_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'sponsor' in request.resolver_match.url_name and 'application' not in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>🏢</span> Sponsors
+        <i class="fas fa-building"></i> Sponsors
       </a>
       <a href="{% url 'portal:sponsor_applications' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'application' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>📩</span> Applications
+        <i class="fas fa-inbox"></i> Applications
       </a>
       <a href="{% url 'portal:job_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'job' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
-        <span>💼</span> Job Postings
+        <i class="fas fa-briefcase"></i> Job Postings
+      </a>
+      <p class="px-3 pt-3 pb-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">Shop</p>
+      <a href="{% url 'portal:product_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'product' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
+        <i class="fas fa-box"></i> Products
+      </a>
+      <a href="{% url 'portal:category_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'category' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
+        <i class="fas fa-tags"></i> Categories
+      </a>
+      <a href="{% url 'portal:order_list' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700 {% if 'order' in request.resolver_match.url_name %}bg-slate-700 text-white{% endif %}">
+        <i class="fas fa-shopping-bag"></i> Orders
       </a>
     </nav>
     <div class="px-5 py-4 border-t border-slate-700 text-xs text-slate-400">

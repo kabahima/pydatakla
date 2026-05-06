@@ -1,101 +1,35 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}PyData Kampala 2025 - Pydata Community in Uganda  {% endblock %}
 
 {% block content %}
 
 <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
-<section class="relative h-screen min-h-[600px] max-h-[900px] overflow-hidden">
+<section class="relative h-screen flex items-center justify-center bg-slate-900">
 
-  {% if hero_slides %}
-  <!-- Background slider -->
-  <div id="hero-slider" class="absolute inset-0">
-    {% for slide in hero_slides %}
-    <div class="hero-slide absolute inset-0 transition-opacity duration-1000 {% if not forloop.first %}opacity-0{% endif %}">
-      <img src="{{ slide.image.url }}" alt="{{ slide.title }}" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/50 to-slate-900/70"></div>
-    </div>
-    {% endfor %}
-  </div>
-  {% else %}
-  <!-- Fallback gradient background -->
-  <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-slate-900"></div>
-  <div class="absolute inset-0 opacity-10">
-    <div class="absolute top-20 left-20 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-    <div class="absolute bottom-20 right-20 w-80 h-80 bg-cyan-300 rounded-full blur-3xl"></div>
-  </div>
-  {% endif %}
+  <!-- Background -->
+  <img src="{% static 'pydata.jpg' %}"
+       alt="Conference"
+       class="absolute inset-0 w-full h-full object-cover opacity-40">
 
-  <!-- Content overlay -->
-  <div class="relative h-full flex items-center">
-    <div class="max-w-7xl mx-auto px-6 md:px-10 w-full">
-      <div class="max-w-3xl">
+  <!-- Content -->
+  <div class="relative z-10 text-center px-6 max-w-2xl">
 
-        <span class="inline-flex items-center gap-2 text-blue-300 uppercase tracking-widest text-xs font-semibold mb-6 backdrop-blur-sm bg-white/10 px-3 py-1.5 rounded-full border border-white/20">
-          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/></svg>
-          {{ conf.location_label }}
-        </span>
+    <!-- Location -->
+    
 
-        <h1 class="text-5xl md:text-6xl lg:text-7xl font-serif leading-[1.1] mb-6 text-white drop-shadow-lg">
-          {{ conf.headline }}
-        </h1>
+    <!-- Title -->
+    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+      {{ conf.headline }}
+    </h1>
 
-        <p class="text-blue-100 text-xl leading-relaxed mb-8 max-w-2xl drop-shadow">
-          {{ conf.tagline }}
-        </p>
+    <!-- Tagline -->
+    <p class="text-gray-300 mb-6">
+      {{ conf.tagline }}
+    </p>
 
-        <div class="flex flex-wrap items-center gap-4 mb-10">
-          <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md text-white text-sm font-medium px-4 py-2 rounded-full border border-white/30">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            {{ conf.event_dates }}
-          </span>
-          <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md text-white text-sm font-medium px-4 py-2 rounded-full border border-white/30">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            {{ conf.venue }}
-          </span>
-        </div>
 
-        <div class="flex flex-wrap gap-4">
-          <a href="{{ conf.primary_cta_url|default:'#' }}"
-             class="bg-white text-blue-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-50 active:scale-95 transition shadow-2xl">
-            {{ conf.primary_cta_label }} →
-          </a>
-          <a href="{{ conf.secondary_cta_url|default:'#' }}"
-             class="bg-white/10 backdrop-blur-md border-2 border-white/40 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition">
-            {{ conf.secondary_cta_label }}
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  {% if hero_slides %}
-  <!-- Slide controls -->
-  <div class="absolute bottom-8 right-8 flex items-center gap-2 z-10">
-    <button id="hero-prev"
-      class="w-12 h-12 flex items-center justify-center bg-white/20 backdrop-blur-md text-white rounded-full hover:bg-white/30 transition border border-white/30">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-    </button>
-    <button id="hero-next"
-      class="w-12 h-12 flex items-center justify-center bg-white/20 backdrop-blur-md text-white rounded-full hover:bg-white/30 transition border border-white/30">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-    </button>
-  </div>
-
-  <!-- Dot indicators -->
-  <div id="hero-dots" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-    {% for slide in hero_slides %}
-    <button class="hero-dot h-2 rounded-full transition-all {% if forloop.first %}bg-white w-8{% else %}bg-white/40 w-2{% endif %}"></button>
-    {% endfor %}
-  </div>
-  {% endif %}
-
-  <!-- Scroll indicator -->
-  <div class="absolute bottom-8 left-8 animate-bounce">
-    <svg class="w-6 h-6 text-white/60" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-    </svg>
   </div>
 
 </section>

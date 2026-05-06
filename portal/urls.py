@@ -86,4 +86,15 @@ urlpatterns = [
     # Sponsor Applications
     path('sponsor-applications/', views.sponsor_applications, name='sponsor_applications'),
     path('sponsor-applications/<int:pk>/update/', views.sponsor_application_update, name='sponsor_application_update'),
+
+    # Shop
+    path('products/', views.product_list, name='product_list'),
+    path('categories/', views.category_list, name='category_list'),
+    path('products/new/', views.product_create, name='product_create'),
+    path('products/<int:pk>/edit/', views.product_edit, name='product_edit'),
+    path('products/<int:pk>/delete/', views.product_delete, name='product_delete'),
+    path('categories/new/', views.category_create, name='category_create'),
+    path('categories/<int:pk>/edit/', views.category_edit, name='category_edit'),
+    path('categories/<int:pk>/delete/', views.category_delete, name='category_delete'),
+    path('orders/', views.order_list, name='order_list'),
 ]
