@@ -1,5 +1,4 @@
 {
-  "buildCommand": "python manage.py collectstatic --noinput",
   "devCommand": "python manage.py runserver",
   "env": {
     "DJANGO_SETTINGS_MODULE": "pydatakla.settings"
@@ -10,7 +9,8 @@
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.12"
+        "runtime": "python3.12",
+        "requirementsFile": "requirements.txt"
       }
     }
   ],
