@@ -1,16 +1,11 @@
 {
-  "devCommand": "python manage.py runserver",
-  "env": {
-    "DJANGO_SETTINGS_MODULE": "pydatakla.settings"
-  },
   "builds": [
     {
-      "src": "api/index.py",
+      "src": "pydatakla/wsgi.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.12",
-        "requirementsFile": "requirements.txt"
+        "runtime": "python3.12"
       }
     }
   ],
@@ -28,7 +23,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "api/index.py"
+      "dest": "pydatakla/wsgi.py"
     }
   ]
 }
