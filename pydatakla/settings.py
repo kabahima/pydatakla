@@ -92,8 +92,7 @@ WSGI_APPLICATION = "pydatakla.wsgi.application"
 if os.environ.get("DATABASE_URL"):
     DATABASES = {
         "default": dj_database_url.config(
-            conn_max_age=300,  # 5 min for serverless
-            atomic_requests=True,
+            conn_max_age=300, 
             OPTIONS={
                 "connect_timeout": 10,
                 "keepalives": 1,
@@ -101,6 +100,7 @@ if os.environ.get("DATABASE_URL"):
             },
         )
     }
+    DATABASES["default"]["ATOMIC_REQUESTS"] = True
 else:
     DATABASES = {
         "default": {
