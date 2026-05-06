@@ -13,9 +13,20 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from pathlib import Path
 from urllib.parse import urlparse
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load local .env values if present (without overriding real environment vars).
+env_file = BASE_DIR / ".env"
+if env_file.exists():
+    for line in env_file.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip())
 
 
 # Quick-start development settings - unsuitable for production
@@ -49,8 +60,9 @@ INSTALLED_APPS = [
     "portal",
 ]
 
-# Add cloudinary apps only when CLOUDINARY_URL is configured
-if os.environ.get("CLOUDINARY_URL"):
+# Add cloudinary apps only when CLOUDINARY_URL is configured correctly
+_cloudinary_url = os.environ.get("CLOUDINARY_URL", "")
+if _cloudinary_url.startswith("cloudinary://"):
     INSTALLED_APPS.insert(6, "cloudinary_storage")
     INSTALLED_APPS.insert(7, "cloudinary")
 
@@ -89,7 +101,7 @@ WSGI_APPLICATION = "pydatakla.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-database_url = os.environ.get("POSTGRES_URL") or os.environ.get("DATABASE_URL")
+database_url = os.environ.get("POSTGRES_URL")
 
 if database_url:
     parsed_url = urlparse(database_url)
@@ -104,13 +116,16 @@ if database_url:
             "CONN_MAX_AGE": 300,
         }
     }
-else:
+elif DEBUG:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+else:
+    raise ImproperlyConfigured("POSTGRES_URL must be set in production")
+
 
 
 # Password validation
@@ -158,8 +173,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Cloudinary — reads CLOUDINARY_URL env var automatically
 # Format: cloudinary://api_key:api_secret@cloud_name
-_cloudinary_url = os.environ.get("CLOUDINARY_URL", "")
-if _cloudinary_url:
+if _cloudinary_url.startswith("cloudinary://"):
     STORAGES = {
         "default": {
             "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
