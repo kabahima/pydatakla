@@ -18,4 +18,8 @@ urlpatterns = [
     path('sponsors/', views.sponsors, name='sponsors'),
     path('conduct/', views.conduct, name='conduct'),
     path('about/', views.about, name='about'),
+    path('meetups/', views.meetups, name='meetups'),
+    path('meetups/<slug:slug>/', views.meetup_detail, name='meetup_detail'),
+    path('projects/', views.projects, name='projects'),
+    path('become-a-sponsor/', views.sponsor_apply, name='sponsor_apply'),
 ]

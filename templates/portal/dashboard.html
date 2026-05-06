@@ -1,0 +1,102 @@
+{% extends 'portal/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+
+{% block header_actions %}
+  <a href="{% url 'portal:post_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">+ New Post</a>
+{% endblock %}
+
+{% block content %}
+
+<!-- Stats grid -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+  <a href="{% url 'portal:speaker_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.speakers }}</p>
+    <p class="text-sm text-slate-500 mt-1">Speakers</p>
+  </a>
+  <a href="{% url 'portal:talk_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.talks }}</p>
+    <p class="text-sm text-slate-500 mt-1">Talks</p>
+  </a>
+  <a href="{% url 'portal:slot_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.schedule_slots }}</p>
+    <p class="text-sm text-slate-500 mt-1">Schedule Slots</p>
+  </a>
+  <a href="{% url 'portal:sponsor_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.sponsors }}</p>
+    <p class="text-sm text-slate-500 mt-1">Sponsors</p>
+  </a>
+  <a href="{% url 'portal:job_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.jobs }}</p>
+    <p class="text-sm text-slate-500 mt-1">Job Postings</p>
+  </a>
+  <a href="{% url 'portal:post_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.published_posts }}<span class="text-base font-normal text-slate-400">/{{ stats.blog_posts }}</span></p>
+    <p class="text-sm text-slate-500 mt-1">Blog Posts</p>
+  </a>
+  <a href="{% url 'portal:meetup_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.meetups }}</p>
+    <p class="text-sm text-slate-500 mt-1">Meetups</p>
+  </a>
+  <a href="{% url 'portal:project_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.projects }}</p>
+    <p class="text-sm text-slate-500 mt-1">Projects</p>
+  </a>
+  <a href="{% url 'portal:program_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.programs }}</p>
+    <p class="text-sm text-slate-500 mt-1">Programs</p>
+  </a>
+  <a href="{% url 'portal:proposal_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.proposals }}</p>
+    <p class="text-sm text-slate-500 mt-1">CFPs</p>
+  </a>
+  <a href="{% url 'portal:slide_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.hero_slides }}</p>
+    <p class="text-sm text-slate-500 mt-1">Hero Slides</p>
+  </a>
+  <a href="{% url 'portal:gallery_list' %}" class="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition">
+    <p class="text-2xl font-bold text-slate-900">{{ stats.gallery }}</p>
+    <p class="text-sm text-slate-500 mt-1">Gallery Photos</p>
+  </a>
+</div>
+
+<!-- Recent posts -->
+<div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-semibold text-slate-800">Recent Blog Posts</h2>
+    <a href="{% url 'portal:post_list' %}" class="text-xs text-blue-600 hover:underline">View all →</a>
+  </div>
+  {% if recent_posts %}
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left text-slate-500 border-b border-slate-100">
+        <th class="pb-2 font-medium">Title</th>
+        <th class="pb-2 font-medium">Status</th>
+        <th class="pb-2 font-medium">Created</th>
+        <th class="pb-2"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-50">
+      {% for post in recent_posts %}
+      <tr>
+        <td class="py-2 text-slate-800">{{ post.title }}</td>
+        <td class="py-2">
+          {% if post.is_published %}
+            <span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">Published</span>
+          {% else %}
+            <span class="bg-slate-100 text-slate-500 text-xs px-2 py-0.5 rounded-full">Draft</span>
+          {% endif %}
+        </td>
+        <td class="py-2 text-slate-500">{{ post.created_at|date:"M d, Y" }}</td>
+        <td class="py-2 text-right">
+          <a href="{% url 'portal:post_edit' post.pk %}" class="text-blue-600 hover:underline">Edit</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="text-slate-400 text-sm">No posts yet. <a href="{% url 'portal:post_create' %}" class="text-blue-600 hover:underline">Create one →</a></p>
+  {% endif %}
+</div>
+{% endblock %}

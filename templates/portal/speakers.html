@@ -1,0 +1,35 @@
+{% extends 'portal/base.html' %}
+{% block title %}Speakers{% endblock %}
+{% block heading %}Speakers{% endblock %}
+{% block header_actions %}
+  <a href="{% url 'portal:speaker_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">+ Add Speaker</a>
+{% endblock %}
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-slate-50 border-b border-slate-100">
+      <tr class="text-left text-slate-500">
+        <th class="px-5 py-3 font-medium">Name</th>
+        <th class="px-5 py-3 font-medium">Twitter</th>
+        <th class="px-5 py-3 font-medium">GitHub</th>
+        <th class="px-5 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-50">
+      {% for obj in objects %}
+      <tr class="hover:bg-slate-50">
+        <td class="px-5 py-3 text-slate-800 font-medium">{{ obj.name }}</td>
+        <td class="px-5 py-3 text-slate-500">{{ obj.twitter|default:"—" }}</td>
+        <td class="px-5 py-3 text-slate-500">{{ obj.github|default:"—" }}</td>
+        <td class="px-5 py-3 text-right space-x-3">
+          <a href="{% url 'portal:speaker_edit' obj.pk %}" class="text-blue-600 hover:underline">Edit</a>
+          <a href="{% url 'portal:speaker_delete' obj.pk %}" class="text-red-500 hover:underline">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="px-5 py-6 text-slate-400 text-center">No speakers yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

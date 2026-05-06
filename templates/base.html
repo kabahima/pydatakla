@@ -19,15 +19,12 @@
   {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+{% load static %}
 
   <!-- Navbar -->
   <header class="sticky top-0 z-30 flex items-center justify-between px-6 md:px-10 py-5 border-b border-blue-100 bg-white/95 backdrop-blur-sm">
     <a href="{% url 'conference:home' %}" class="flex items-center gap-2">
-      <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-      </svg>
-      <span class="text-xl font-bold tracking-wide text-slate-900">PyData <span class="text-blue-500">Kampala</span></span>
+      <img src="{% static 'pydata.jpg' %}" alt="PyData Kampala" class="h-12 w-auto object-contain">
     </a>
 
     <!-- Mobile menu toggle -->
@@ -39,14 +36,11 @@
     </button>
 
     <nav id="nav-links" class="hidden md:flex gap-6 text-sm font-medium text-slate-700">
-      <a href="{% url 'conference:talks' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'talks' %}text-blue-700{% endif %}">Talks</a>
-      <a href="{% url 'conference:programs' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'programs' or request.resolver_match.url_name == 'program_detail' or request.resolver_match.url_name == 'program_proposals' %}text-blue-700{% endif %}">Programs</a>
-      <a href="{% url 'conference:schedule' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'schedule' %}text-blue-700{% endif %}">Schedule</a>
-      <a href="{% url 'conference:speakers' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'speakers' %}text-blue-700{% endif %}">Speakers</a>
-      <a href="{% url 'conference:blog' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'blog' or request.resolver_match.url_name == 'blog_detail' %}text-blue-700{% endif %}">Blog</a>
-      <a href="{% url 'conference:sponsors' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'sponsors' %}text-blue-700{% endif %}">Sponsors&nbsp;/&nbsp;Jobs</a>
-      <a href="{% url 'conference:conduct' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'conduct' %}text-blue-700{% endif %}">Conduct</a>
       <a href="{% url 'conference:about' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'about' %}text-blue-700{% endif %}">About</a>
+      <a href="{% url 'conference:schedule' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'schedule' or request.resolver_match.url_name == 'talks' or request.resolver_match.url_name == 'talk_detail' or request.resolver_match.url_name == 'speakers' %}text-blue-700{% endif %}">Events</a>
+      <a href="{% url 'conference:meetups' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'meetups' or request.resolver_match.url_name == 'meetup_detail' %}text-blue-700{% endif %}">Meetups</a>
+      <a href="{% url 'conference:projects' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'projects' %}text-blue-700{% endif %}">Projects</a>
+      <a href="{% url 'conference:conduct' %}" class="hover:text-blue-700 transition {% if request.resolver_match.url_name == 'conduct' %}text-blue-700{% endif %}">Code of Conduct</a>
     </nav>
 
     <a href="{% url 'conference:schedule' %}"
@@ -57,14 +51,11 @@
 
   <!-- Mobile nav drawer -->
   <div id="mobile-nav" class="hidden md:hidden bg-blue-50 px-6 py-4 flex flex-col gap-4 text-sm font-medium text-slate-700 border-b border-blue-100">
-    <a href="{% url 'conference:talks' %}" class="hover:text-blue-700">Talks</a>
-    <a href="{% url 'conference:programs' %}" class="hover:text-blue-700">Programs</a>
-    <a href="{% url 'conference:schedule' %}" class="hover:text-blue-700">Schedule</a>
-    <a href="{% url 'conference:speakers' %}" class="hover:text-blue-700">Speakers</a>
-    <a href="{% url 'conference:blog' %}" class="hover:text-blue-700">Blog</a>
-    <a href="{% url 'conference:sponsors' %}" class="hover:text-blue-700">Sponsors / Jobs</a>
-    <a href="{% url 'conference:conduct' %}" class="hover:text-blue-700">Conduct</a>
     <a href="{% url 'conference:about' %}" class="hover:text-blue-700">About</a>
+    <a href="{% url 'conference:schedule' %}" class="hover:text-blue-700">Events</a>
+    <a href="{% url 'conference:meetups' %}" class="hover:text-blue-700">Meetups</a>
+    <a href="{% url 'conference:projects' %}" class="hover:text-blue-700">Projects</a>
+    <a href="{% url 'conference:conduct' %}" class="hover:text-blue-700">Code of Conduct</a>
     <a href="{% url 'conference:schedule' %}" class="bg-blue-600 text-white px-5 py-2 rounded-full font-semibold hover:bg-blue-700 transition text-center">Register →</a>
   </div>
 

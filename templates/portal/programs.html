@@ -1,0 +1,35 @@
+{% extends 'portal/base.html' %}
+{% block title %}Programs{% endblock %}
+{% block heading %}Programs{% endblock %}
+{% block header_actions %}
+  <a href="{% url 'portal:program_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">+ Add Program</a>
+{% endblock %}
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-slate-50 border-b border-slate-100">
+      <tr class="text-left text-slate-500">
+        <th class="px-5 py-3 font-medium">Title</th>
+        <th class="px-5 py-3 font-medium">Active</th>
+        <th class="px-5 py-3 font-medium">Dates</th>
+        <th class="px-5 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-50">
+      {% for obj in objects %}
+      <tr class="hover:bg-slate-50">
+        <td class="px-5 py-3 text-slate-800 font-medium">{{ obj.title }}</td>
+        <td class="px-5 py-3">{% if obj.is_active %}<span class="text-green-600">✓</span>{% else %}<span class="text-slate-300">—</span>{% endif %}</td>
+        <td class="px-5 py-3 text-slate-500">{{ obj.start_date|default:"—" }} → {{ obj.end_date|default:"—" }}</td>
+        <td class="px-5 py-3 text-right space-x-3">
+          <a href="{% url 'portal:program_edit' obj.pk %}" class="text-blue-600 hover:underline">Edit</a>
+          <a href="{% url 'portal:program_delete' obj.pk %}" class="text-red-500 hover:underline">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="px-5 py-6 text-slate-400 text-center">No programs yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

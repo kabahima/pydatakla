@@ -1,15 +1,9 @@
 from django.contrib import admin
 
 from .models import (
-    Speaker,
-    Talk,
-    ScheduleSlot,
-    Sponsor,
-    JobPosting,
-    HeroSlide,
-    BlogPost,
-    Program,
-    CallForProposal,
+    Speaker, Talk, ScheduleSlot, Sponsor, JobPosting,
+    HeroSlide, BlogPost, Program, CallForProposal,
+    ConferenceInfo, GalleryPhoto, Meetup, Project, SponsorApplication,
 )
 
 
@@ -71,3 +65,44 @@ class CallForProposalAdmin(admin.ModelAdmin):
     list_display = ('title', 'program', 'is_open', 'closes_at')
     list_filter = ('is_open', 'program')
     search_fields = ('title', 'description', 'program__title')
+
+
+@admin.register(ConferenceInfo)
+class ConferenceInfoAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return not ConferenceInfo.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(GalleryPhoto)
+class GalleryPhotoAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'order', 'is_active')
+    list_filter = ('is_active',)
+    ordering = ('order',)
+
+
+@admin.register(Meetup)
+class MeetupAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date', 'time', 'venue', 'is_published')
+    list_filter = ('is_published',)
+    search_fields = ('title', 'description', 'venue')
+    prepopulated_fields = {'slug': ('title',)}
+    ordering = ('date',)
+
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_featured', 'is_published', 'created_at')
+    list_filter = ('is_featured', 'is_published')
+    search_fields = ('title', 'description', 'tags')
+
+
+@admin.register(SponsorApplication)
+class SponsorApplicationAdmin(admin.ModelAdmin):
+    list_display = ('organisation', 'contact_name', 'email', 'tier_interest', 'status', 'submitted_at')
+    list_filter = ('status', 'tier_interest')
+    search_fields = ('organisation', 'contact_name', 'email')
+    readonly_fields = ('submitted_at',)
+    ordering = ('-submitted_at',)

@@ -1,73 +1,133 @@
 {% extends "base.html" %}
 
-{% block title %}Code of Conduct – PyData Kampala 2025{% endblock %}
+{% block title %}Code of Conduct – PyData Kampala{% endblock %}
 
 {% block content %}
 <section class="px-6 md:px-10 py-16 max-w-3xl mx-auto">
-  <h1 class="text-4xl font-serif mb-4">Code of Conduct</h1>
-  <p class="text-blue-300 mb-8 text-lg">
-    PyData Kampala is dedicated to providing a harassment-free conference experience for everyone.
+
+  <p class="text-blue-600 text-xs font-semibold uppercase tracking-widest mb-2">Community</p>
+  <h1 class="text-4xl font-serif text-slate-900 mb-3">Code of Conduct</h1>
+  <p class="text-slate-500 text-lg mb-12 max-w-2xl">
+    PyData Kampala is dedicated to providing a harassment-free, productive, and inclusive experience
+    for everyone — at our events, meetups, and online spaces.
   </p>
 
-  <div class="space-y-8 text-blue-100 leading-relaxed">
+  <div class="space-y-10 text-slate-600 leading-relaxed">
 
-    <div>
-      <h2 class="text-xl font-semibold text-blue-300 mb-3">Our Pledge</h2>
-      <p>
-        We pledge to make participation in our community a harassment-free experience for everyone, regardless of age,
-        body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression,
-        level of experience, education, socio-economic status, nationality, personal appearance, race, caste, colour,
-        religion, or sexual identity and orientation.
+    <!-- Short version -->
+    <div class="bg-blue-50 border border-blue-100 rounded-2xl p-6">
+      <h2 class="text-base font-semibold text-blue-700 uppercase tracking-wide mb-3">The Short Version</h2>
+      <p class="text-slate-700 mb-3">
+        Be kind to others. Do not insult or put down other attendees. Behave professionally.
+        Harassment and sexist, racist, or exclusionary jokes and language are not appropriate for PyData events.
+      </p>
+      <p class="text-slate-700">
+        All attendees are expected to show respect and courtesy to others throughout the conference and at all
+        conference events, whether officially sponsored by PyData or not. Organisers will enforce this code
+        throughout the event.
       </p>
     </div>
 
+    <!-- Our pledge -->
     <div>
-      <h2 class="text-xl font-semibold text-blue-300 mb-3">Our Standards</h2>
-      <p class="mb-3">Examples of behaviour that contributes to a positive environment:</p>
-      <ul class="list-disc list-inside space-y-1 text-blue-200 ml-4">
-        <li>Demonstrating empathy and kindness toward other people</li>
-        <li>Being respectful of differing opinions, viewpoints, and experiences</li>
-        <li>Giving and gracefully accepting constructive feedback</li>
-        <li>Accepting responsibility for mistakes and learning from the experience</li>
-        <li>Focusing on what is best for the overall community</li>
+      <h2 class="text-xl font-semibold text-slate-800 mb-3">Our Pledge</h2>
+      <p>
+        In the interest of fostering an open and welcoming environment, we as organisers and community members
+        pledge to make participation in PyData Kampala a harassment-free experience for everyone, regardless of
+        age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and
+        expression, level of experience, education, socio-economic status, nationality, personal appearance,
+        race, caste, colour, religion, or sexual identity and orientation.
+      </p>
+    </div>
+
+    <!-- Standards -->
+    <div>
+      <h2 class="text-xl font-semibold text-slate-800 mb-4">Our Standards</h2>
+      <p class="mb-4">Examples of behaviour that contributes to a positive environment include:</p>
+      <ul class="space-y-2 mb-6">
+        {% for item in positive_behaviours %}
+        <li class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          <span>{{ item }}</span>
+        </li>
+        {% endfor %}
       </ul>
-      <p class="mt-4 mb-3">Examples of unacceptable behaviour:</p>
-      <ul class="list-disc list-inside space-y-1 text-red-300 ml-4">
-        <li>The use of sexualised language or imagery, and unwelcome sexual attention or advances</li>
-        <li>Trolling, insulting or derogatory comments, and personal or political attacks</li>
-        <li>Public or private harassment</li>
-        <li>Publishing others' private information without explicit permission</li>
-        <li>Other conduct which could reasonably be considered inappropriate</li>
+
+      <p class="mb-4">Examples of unacceptable behaviour include:</p>
+      <ul class="space-y-2">
+        {% for item in negative_behaviours %}
+        <li class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-red-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          <span>{{ item }}</span>
+        </li>
+        {% endfor %}
       </ul>
     </div>
 
-    <div>
-      <h2 class="text-xl font-semibold text-blue-300 mb-3">Enforcement</h2>
-      <p>
-        Community leaders are responsible for clarifying and enforcing our standards of acceptable behaviour and will
-        take appropriate and fair corrective action in response to any behaviour deemed inappropriate, threatening,
-        offensive, or harmful.
+    <!-- Reporting -->
+    <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+      <h2 class="text-xl font-semibold text-slate-800 mb-3">Reporting an Incident</h2>
+      <p class="mb-4">
+        If you are being harassed, notice that someone else is being harassed, or have any other concerns,
+        please contact a member of the conference staff immediately. Conference staff can be identified by
+        their staff badges.
+      </p>
+      <p class="mb-5">
+        You may also report incidents directly to the PyData Kampala organisers:
+      </p>
+      <a href="mailto:conduct@pydatakampala.org"
+         class="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-full font-medium text-sm hover:bg-blue-700 transition shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        conduct@pydatakampala.org
+      </a>
+      <p class="mt-4 text-sm text-slate-500">
+        For incidents at NumFOCUS-affiliated events, you may also file a report directly with NumFOCUS at
+        <a href="https://numfocus.org/report" target="_blank" rel="noopener noreferrer"
+           class="text-blue-600 hover:underline">numfocus.org/report</a>.
+        All complaints will be reviewed and investigated promptly and fairly, and all reporters have the
+        right to confidentiality.
       </p>
     </div>
 
+    <!-- Enforcement -->
     <div>
-      <h2 class="text-xl font-semibold text-blue-300 mb-3">Reporting</h2>
+      <h2 class="text-xl font-semibold text-slate-800 mb-3">Enforcement</h2>
+      <p class="mb-4">
+        Community leaders are responsible for clarifying and enforcing our standards of acceptable behaviour
+        and will take appropriate and fair corrective action in response to any behaviour deemed inappropriate,
+        threatening, offensive, or harmful.
+      </p>
+      <p class="mb-3">Potential consequences for violating this Code of Conduct include:</p>
+      <ul class="space-y-1.5 text-sm">
+        {% for item in consequences %}
+        <li class="flex items-center gap-2 text-slate-600">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0"></span>
+          {{ item }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Scope -->
+    <div>
+      <h2 class="text-xl font-semibold text-slate-800 mb-3">Scope</h2>
       <p>
-        Instances of abusive, harassing, or otherwise unacceptable behaviour may be reported to the conference
-        organisers at
-        <a href="mailto:conduct@pydatakampala.org" class="text-blue-400 hover:text-blue-300 underline">
-          conduct@pydatakampala.org
-        </a>.
-        All complaints will be reviewed and investigated promptly and fairly.
+        This Code of Conduct applies within all PyData Kampala community spaces — including the conference venue,
+        workshops, social events, and online channels — and also applies when an individual is officially
+        representing the community in public spaces.
       </p>
     </div>
 
-    <div>
-      <h2 class="text-xl font-semibold text-blue-300 mb-3">Attribution</h2>
-      <p class="text-sm text-blue-400">
+    <!-- Attribution -->
+    <div class="border-t border-slate-100 pt-8">
+      <p class="text-sm text-slate-400">
         This Code of Conduct is adapted from the
-        <a href="https://www.contributor-covenant.org" target="_blank" rel="noopener noreferrer"
-           class="underline hover:text-blue-300">Contributor Covenant</a>, version 2.1.
+        <a href="https://numfocus.org/code-of-conduct" target="_blank" rel="noopener noreferrer"
+           class="text-blue-500 hover:underline">NumFOCUS Code of Conduct</a>
+        and the
+        <a href="https://pydata.org/about/code-of-conduct/" target="_blank" rel="noopener noreferrer"
+           class="text-blue-500 hover:underline">PyData Code of Conduct</a>.
+        PyData Kampala is a community event organised under the NumFOCUS umbrella.
       </p>
     </div>
 

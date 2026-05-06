@@ -130,6 +130,35 @@ class Program(models.Model):
         return self.title
 
 
+class ConferenceInfo(models.Model):
+    """Singleton — only one row should exist. Controls the home hero section."""
+    location_label = models.CharField(max_length=100, default="Kampala, Uganda")
+    headline = models.CharField(max_length=300, default="Talks, workshops, and data sprints in Kampala")
+    tagline = models.TextField(default="Join Africa's vibrant data science community for two days of inspiring talks, hands-on tutorials, and networking with fellow practitioners.")
+    event_dates = models.CharField(max_length=100, default="15-16 August 2025")
+    venue = models.CharField(max_length=200, default="Makerere University, Kampala")
+    primary_cta_label = models.CharField(max_length=80, default="Register Now")
+    primary_cta_url = models.URLField(blank=True)
+    secondary_cta_label = models.CharField(max_length=80, default="Explore Programs")
+    secondary_cta_url = models.URLField(blank=True)
+    stat_days = models.CharField(max_length=20, default="2")
+    stat_talks = models.CharField(max_length=20, default="30+")
+    stat_attendees = models.CharField(max_length=20, default="500+")
+    stat_workshops = models.CharField(max_length=20, default="10+")
+
+    class Meta:
+        verbose_name = "Conference Info"
+        verbose_name_plural = "Conference Info"
+
+    def __str__(self):
+        return "Conference Info"
+
+    @classmethod
+    def get(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
 class CallForProposal(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='proposals')
     title = models.CharField(max_length=220)
@@ -144,3 +173,91 @@ class CallForProposal(models.Model):
 
     def __str__(self):
         return f"{self.program.title}: {self.title}"
+
+
+class GalleryPhoto(models.Model):
+    image = models.ImageField(upload_to='gallery/')
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.caption or f"Photo {self.pk}"
+
+
+class Meetup(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    cover_image = models.ImageField(upload_to='meetups/', blank=True, null=True)
+    description = models.TextField()
+    date = models.DateField()
+    time = models.TimeField()
+    venue = models.CharField(max_length=200)
+    venue_url = models.URLField(blank=True, help_text="Google Maps or venue website link")
+    registration_url = models.URLField(help_text="Link to RSVP / registration form")
+    is_published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date', 'time']
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def is_upcoming(self):
+        from django.utils import timezone
+        return self.date >= timezone.localdate()
+
+
+class Project(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    github_url = models.URLField(help_text="Link to the GitHub repository")
+    demo_url = models.URLField(blank=True, help_text="Live demo or project website (optional)")
+    cover_image = models.ImageField(upload_to='projects/', blank=True, null=True)
+    tags = models.CharField(max_length=200, blank=True, help_text="Comma-separated tags e.g. Python, ML, Data")
+    is_featured = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-is_featured', '-created_at']
+
+    def __str__(self):
+        return self.title
+
+    def tag_list(self):
+        return [t.strip() for t in self.tags.split(',') if t.strip()]
+
+
+class SponsorApplication(models.Model):
+    TIERS = [
+        ("platinum", "Platinum"),
+        ("gold", "Gold"),
+        ("silver", "Silver"),
+        ("bronze", "Bronze"),
+        ("community", "Community"),
+    ]
+    STATUS = [
+        ("pending", "Pending"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+    ]
+    organisation = models.CharField(max_length=200)
+    contact_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    website = models.URLField(blank=True)
+    tier_interest = models.CharField(max_length=20, choices=TIERS, default="bronze")
+    message = models.TextField(blank=True, help_text="Anything you'd like us to know")
+    status = models.CharField(max_length=20, choices=STATUS, default="pending")
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-submitted_at']
+
+    def __str__(self):
+        return f"{self.organisation} ({self.get_status_display()})"
