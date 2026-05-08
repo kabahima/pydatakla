@@ -83,6 +83,11 @@ class MeetupForm(forms.ModelForm):
             'registration_url': forms.URLInput(attrs={'placeholder': 'https://...'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.instance or not self.instance.pk:
+            self.fields['is_published'].initial = True
+
 
 class ProjectForm(forms.ModelForm):
     class Meta:

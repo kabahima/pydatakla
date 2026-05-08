@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
+from datetime import datetime, time as dt_time
 
 from .models import (
     Talk, Speaker, ScheduleSlot, Sponsor, JobPosting,
@@ -10,24 +11,58 @@ from .models import (
 
 def home(request):
     today = timezone.localdate()
+    now = timezone.localtime()
     featured_talks = Talk.objects.filter(is_featured=True).select_related('speaker')[:3]
     sponsors = Sponsor.objects.all().order_by('tier')
     hero_slides = HeroSlide.objects.filter(is_active=True).order_by('order')[:4]
     latest_posts = BlogPost.objects.filter(is_published=True).order_by('-published_at', '-created_at')[:3]
     programs = Program.objects.filter(is_active=True).prefetch_related('proposals')[:3]
     gallery_photos = GalleryPhoto.objects.filter(is_active=True).order_by('order')[:6]
+    if not gallery_photos.exists():
+        gallery_photos = GalleryPhoto.objects.all().order_by('order')[:6]
+
     upcoming_meetups = Meetup.objects.filter(is_published=True, date__gte=today).order_by('date', 'time')[:3]
+    if not upcoming_meetups.exists():
+        upcoming_meetups = Meetup.objects.filter(date__gte=today).order_by('date', 'time')[:3]
+    if not upcoming_meetups.exists():
+        upcoming_meetups = Meetup.objects.filter(is_published=True).order_by('-date', '-time')[:3]
     next_meetup = upcoming_meetups.first()
+    conf = ConferenceInfo.get()
+
+    event_countdown_target = None
+    event_countdown_active = False
+    event_countdown_title = None
+    event_countdown_detail = None
+
+    if conf.start_date:
+        event_start = timezone.make_aware(datetime.combine(conf.start_date, dt_time.min), timezone.get_current_timezone())
+        event_end = None
+        if conf.end_date:
+            event_end = timezone.make_aware(datetime.combine(conf.end_date, dt_time.max), timezone.get_current_timezone())
+
+        if now < event_start:
+            event_countdown_target = event_start.isoformat()
+            event_countdown_title = "Countdown to PyData Kampala"
+            event_countdown_detail = conf.event_dates
+        elif event_end and event_start <= now <= event_end:
+            event_countdown_active = True
+            event_countdown_title = "PyData Kampala is happening now"
+            event_countdown_detail = conf.event_dates
+
     return render(request, 'conference/home.html', {
         'featured_talks': featured_talks,
         'sponsors': sponsors,
         'hero_slides': hero_slides,
         'latest_posts': latest_posts,
         'programs': programs,
-        'conf': ConferenceInfo.get(),
+        'conf': conf,
         'gallery_photos': gallery_photos,
         'upcoming_meetups': upcoming_meetups,
         'next_meetup': next_meetup,
+        'event_countdown_target': event_countdown_target,
+        'event_countdown_active': event_countdown_active,
+        'event_countdown_title': event_countdown_title,
+        'event_countdown_detail': event_countdown_detail,
     })
 
 

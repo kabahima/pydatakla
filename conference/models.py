@@ -136,6 +136,8 @@ class ConferenceInfo(models.Model):
     headline = models.CharField(max_length=300, default="Talks, workshops, and data sprints in Kampala")
     tagline = models.TextField(default="Join Africa's vibrant data science community for two days of inspiring talks, hands-on tutorials, and networking with fellow practitioners.")
     event_dates = models.CharField(max_length=100, default="15-16 August 2025")
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     venue = models.CharField(max_length=200, default="Makerere University, Kampala")
     primary_cta_label = models.CharField(max_length=80, default="Register Now")
     primary_cta_url = models.URLField(blank=True)

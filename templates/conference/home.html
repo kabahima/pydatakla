@@ -1,305 +1,339 @@
+<!-- home.html -->
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}PyData Kampala 2025 - Pydata Community in Uganda  {% endblock %}
+{% block title %}
+PyData Kampala 2025 - Python, AI & Data Science Community in Uganda
+{% endblock %}
 
 {% block content %}
 
-<!-- ── Hero ──────────────────────────────────────────────────────────────── -->
-<section class="relative h-screen flex items-center justify-center bg-slate-900">
+<!-- HERO -->
+<section class="relative min-h-[92vh] overflow-hidden flex items-center">
 
-  <!-- Background -->
-  <img src="{% static 'pydata.jpg' %}"
-       alt="Conference"
-       class="absolute inset-0 w-full h-full object-cover opacity-40">
+  <!-- BG -->
+  <img
+    src="{% static 'hero_slides/cover.jpg' %}"
+    alt="Kampala skyline"
+    class="absolute inset-0 w-full h-full object-cover"
+    loading="eager"
+    decoding="async"
+    fetchpriority="high">
 
-  <!-- Content -->
-  <div class="relative z-10 text-center px-6 max-w-2xl">
+  <!-- OVERLAY -->
+  <div class="absolute inset-0 bg-gradient-to-br from-black/70 via-black/55 to-[#112868]/80 z-10"></div>
 
-    <!-- Location -->
-    
+  <!-- GLOW -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-blue-500/20 blur-3xl rounded-full z-10"></div>
 
-    <!-- Title -->
-    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
-      {{ conf.headline }}
-    </h1>
+  <!-- CONTENT -->
+  <div class="container-main relative z-20">
 
-    <!-- Tagline -->
-    <p class="text-gray-300 mb-6">
-      {{ conf.tagline }}
-    </p>
+    <div class="max-w-3xl fade-up">
 
+      <!-- BADGE -->
+      <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-white text-sm font-medium mb-8">
 
+        <span class="w-2 h-2 rounded-full bg-green-400"></span>
+
+        Kampala • Uganda
+
+      </div>
+
+      <!-- TITLE -->
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] text-white mb-6">
+        {{ conf.headline }}
+      </h1>
+
+      <!-- TEXT -->
+      <p class="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mb-10">
+        {{ conf.tagline }}
+      </p>
+
+      <!-- BUTTONS -->
+      <div class="flex flex-col sm:flex-row gap-4 pt-2">
+
+        <a href="{% url 'conference:meetups' %}"
+           class="bg-white text-[#112868] px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition shadow-2xl hover:scale-[1.02] text-center">
+          Upcoming Events →
+        </a>
+
+        <a href="{% url 'conference:about' %}"
+           class="border border-white/20 bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-full font-semibold hover:bg-white/20 transition text-center">
+          Learn More
+        </a>
+
+      </div>
+
+    </div>
   </div>
+
+  <!-- FADE -->
+  <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-slate-50 to-transparent z-20"></div>
 
 </section>
 
-<!-- ── Upcoming Meetups ───────────────────────────────────────────────────── -->
-{% if upcoming_meetups %}
-<section class="px-6 md:px-10 py-16 bg-white border-t border-slate-100">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-end mb-10 gap-4">
+
+<!-- UPCOMING MEETUPS -->
+<section class="section-spacing bg-white">
+
+  <div class="container-main">
+
+    <div class="flex justify-between items-end mb-14 gap-4">
+
       <div>
-        <p class="text-blue-600 text-xs font-semibold uppercase tracking-widest mb-2">What's coming up</p>
-        <h2 class="text-3xl font-serif text-slate-900">Upcoming Meetups</h2>
+        <p class="text-blue-600 text-xs font-semibold uppercase tracking-[0.3em] mb-3">
+          What's coming up
+        </p>
+
+        <h2 class="text-4xl font-black tracking-tight text-slate-900">
+          Upcoming Meetups
+        </h2>
       </div>
-      <a href="{% url 'conference:meetups' %}" class="text-sm text-blue-600 hover:text-blue-800 font-medium transition shrink-0">
+
+      <a href="{% url 'conference:meetups' %}"
+         class="text-sm text-blue-600 hover:text-blue-800 font-medium transition">
         All meetups →
       </a>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6">
+    <div class="grid md:grid-cols-3 gap-8">
+
       {% for meetup in upcoming_meetups %}
       <a href="{% url 'conference:meetup_detail' meetup.slug %}"
-         class="group bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-blue-200 transition flex flex-col">
+         class="card-modern overflow-hidden flex flex-col">
+
         {% if meetup.cover_image %}
-        <div class="h-44 overflow-hidden">
-          <img src="{{ meetup.cover_image.url }}" alt="{{ meetup.title }}"
+        <div class="h-56 overflow-hidden">
+          <img src="{{ meetup.cover_image.url }}"
+               alt="{{ meetup.title }}"
                class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
         </div>
-        {% else %}
-        <div class="h-44 bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center">
-          <svg class="w-10 h-10 text-blue-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-          </svg>
-        </div>
         {% endif %}
-        <div class="p-5 flex flex-col flex-1">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
-            <span class="text-xs text-slate-400">{{ meetup.date|date:"M j, Y" }} · {{ meetup.time|time:"g:i A" }}</span>
+
+        <div class="p-6 flex flex-col flex-1">
+
+          <div class="flex items-center gap-2 mb-4">
+            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+
+            <span class="text-xs text-slate-400">
+              {{ meetup.date|date:"M j, Y" }} · {{ meetup.time|time:"g:i A" }}
+            </span>
           </div>
-          <h3 class="text-base font-semibold text-slate-900 group-hover:text-blue-700 transition leading-snug mb-2 flex-1">
+
+          <h3 class="text-xl font-bold text-slate-900 leading-snug mb-4">
             {{ meetup.title }}
           </h3>
-          <div class="flex items-center justify-between mt-3 pt-3 border-t border-slate-50">
-            <span class="text-xs text-slate-400 truncate max-w-[60%]">
-              <svg class="w-3 h-3 inline mr-1 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+
+          <p class="text-slate-500 text-sm leading-relaxed mb-6">
+            {{ meetup.description|truncatewords:18 }}
+          </p>
+
+          <div class="mt-auto flex items-center justify-between gap-4 pt-5 border-t border-slate-100">
+
+            <span class="text-sm text-slate-400">
               {{ meetup.venue }}
             </span>
-            <span class="text-xs text-blue-600 font-medium group-hover:underline">Register →</span>
+
+            {% if meetup.registration_url %}
+            <span class="text-sm text-blue-600 font-semibold">
+              Register →
+            </span>
+            {% elif meetup.venue_url %}
+            <span class="text-sm text-blue-600 font-semibold">
+              View venue →
+            </span>
+            {% else %}
+            <span class="text-sm text-blue-600 font-semibold">
+              Details →
+            </span>
+            {% endif %}
+
           </div>
         </div>
       </a>
       {% endfor %}
+
+      {% if not upcoming_meetups %}
+      <div class="md:col-span-3 card-modern p-8 text-center">
+        <p class="text-slate-900 font-semibold mb-2">No upcoming meetups right now</p>
+        <p class="text-slate-500 text-sm">Check back soon for the next community gathering.</p>
+      </div>
+      {% endif %}
+
     </div>
   </div>
 </section>
-{% endif %}
 
-<!-- ── Photo Grid ────────────────────────────────────────────────────────── -->
-{% if gallery_photos %}
-<section class="px-6 md:px-10 py-12 bg-white border-t border-slate-100">
-  <div class="max-w-7xl mx-auto">
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+<!-- GALLERY -->
+<section class="section-spacing bg-white border-t border-slate-100">
+
+  <div class="container-main">
+
+    <div class="flex justify-between items-end mb-14 gap-4">
+
+      <div>
+        <p class="text-blue-600 text-xs font-semibold uppercase tracking-[0.3em] mb-3">
+          Gallery
+        </p>
+
+        <h2 class="text-4xl font-black tracking-tight text-slate-900">
+          Moments From PyData Kampala
+        </h2>
+      </div>
+
+      <p class="hidden md:block text-sm text-slate-500 max-w-md text-right">
+        Highlights from our community, talks, workshops, and meetups across the event.
+      </p>
+    </div>
+
+    {% if gallery_photos %}
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+
       {% for photo in gallery_photos %}
-      <div class="relative overflow-hidden rounded-2xl group
-        {% if forloop.counter == 1 %}md:col-span-2 md:row-span-2 h-64 md:h-auto{% else %}h-48 md:h-56{% endif %}">
-        <img src="{{ photo.image.url }}" alt="{{ photo.caption }}"
-             class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+      <figure class="group relative overflow-hidden rounded-3xl bg-slate-100 shadow-sm aspect-[4/3]">
+
+        <img src="{{ photo.image.url }}"
+             alt="{{ photo.caption|default:'PyData Kampala gallery photo' }}"
+             class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105">
+
         {% if photo.caption %}
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-          <p class="text-white text-sm font-medium">{{ photo.caption }}</p>
-        </div>
+        <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent p-4 md:p-5 opacity-0 group-hover:opacity-100 transition duration-300">
+          <p class="text-white text-sm font-medium leading-snug">
+            {{ photo.caption }}
+          </p>
+        </figcaption>
         {% endif %}
-      </div>
+
+      </figure>
       {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
 
-<!-- ── Programs ───────────────────────────────────────────────────────────── -->
-{% if programs %}
-<section class="px-6 md:px-10 py-16 bg-slate-50">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-end mb-10 gap-4">
-      <div>
-        <p class="text-blue-600 text-xs font-semibold uppercase tracking-widest mb-2">What's on</p>
-        <h2 class="text-3xl font-serif text-slate-900">Programs</h2>
-      </div>
-      <a href="{% url 'conference:programs' %}" class="text-sm text-blue-600 hover:text-blue-800 font-medium transition">
-        All programs →
-      </a>
     </div>
-
-    <div class="grid md:grid-cols-3 gap-6">
-      {% for program in programs %}
-      <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-blue-200 transition group">
-        <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-100 transition">
-          <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        </div>
-        <h3 class="text-lg font-semibold text-slate-900 mb-2">{{ program.title }}</h3>
-        <p class="text-slate-500 text-sm leading-relaxed mb-5">{{ program.summary }}</p>
-        <div class="flex flex-wrap gap-2 mt-auto">
-          <a href="{% url 'conference:program_detail' program.slug %}"
-             class="border border-blue-200 text-blue-700 px-4 py-1.5 rounded-full text-xs font-medium hover:bg-blue-50 transition">
-            Details
-          </a>
-          <a href="{% url 'conference:program_proposals' program.slug %}"
-             class="bg-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-medium hover:bg-blue-700 transition">
-            Submit a proposal
-          </a>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- ── Blog ───────────────────────────────────────────────────────────────── -->
-{% if latest_posts %}
-<section class="px-6 md:px-10 py-16 bg-white">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-end mb-10 gap-4">
-      <div>
-        <p class="text-blue-600 text-xs font-semibold uppercase tracking-widest mb-2">Community</p>
-        <h2 class="text-3xl font-serif text-slate-900">From the Blog</h2>
-      </div>
-      <a href="{% url 'conference:blog' %}" class="text-sm text-blue-600 hover:text-blue-800 font-medium transition">
-        All posts →
-      </a>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-6">
-      {% for post in latest_posts %}
-      <a href="{% url 'conference:blog_detail' post.slug %}"
-         class="group bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-blue-200 transition flex flex-col">
-        {% if post.cover_image %}
-        <div class="h-44 overflow-hidden">
-          <img src="{{ post.cover_image.url }}" alt="{{ post.title }}"
-               class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-        </div>
-        {% endif %}
-        <div class="p-6 flex flex-col flex-1">
-          <p class="text-blue-500 text-xs mb-2">{{ post.published_at|date:"M j, Y" }}</p>
-          <h3 class="text-base font-semibold text-slate-900 mb-2 group-hover:text-blue-700 transition leading-snug">{{ post.title }}</h3>
-          <p class="text-slate-500 text-sm leading-relaxed flex-1">{{ post.excerpt }}</p>
-          <span class="mt-4 text-blue-600 text-xs font-medium">Read more →</span>
-        </div>
-      </a>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- ── Featured Talks ─────────────────────────────────────────────────────── -->
-{% if featured_talks %}
-<section class="px-6 md:px-10 py-16 bg-slate-50">
-  <div class="max-w-6xl mx-auto">
-    <div class="mb-10">
-      <p class="text-blue-600 text-xs font-semibold uppercase tracking-widest mb-2">Programme</p>
-      <h2 class="text-3xl font-serif text-slate-900">Featured Talks</h2>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-6">
-      {% for talk in featured_talks %}
-      <a href="{% url 'conference:talk_detail' talk.pk %}"
-         class="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-blue-200 transition flex flex-col">
-        <span class="inline-block text-xs font-semibold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full mb-4 self-start">
-          {{ talk.get_talk_type_display }}
-        </span>
-        <h3 class="text-base font-semibold text-slate-900 mb-2 group-hover:text-blue-700 transition leading-snug flex-1">{{ talk.title }}</h3>
-        <div class="flex items-center gap-2 mt-3 pt-3 border-t border-slate-50">
-          <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold shrink-0">
-            {{ talk.speaker.name|first|upper }}
-          </div>
-          <p class="text-slate-500 text-sm">{{ talk.speaker.name }}</p>
-        </div>
-      </a>
-      {% endfor %}
-    </div>
-
-    <div class="text-center mt-8">
-      <a href="{% url 'conference:talks' %}"
-         class="inline-block border border-blue-200 text-blue-700 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-blue-50 hover:border-blue-400 transition">
-        View all talks →
-      </a>
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- ── Sponsors ───────────────────────────────────────────────────────────── -->
-<section class="px-6 md:px-10 py-16 bg-white border-t border-slate-100">
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-10">
-      <p class="text-blue-600 text-xs font-semibold uppercase tracking-widest mb-2">Partners</p>
-      <h2 class="text-3xl font-serif text-slate-900">Our Sponsors</h2>
-      <p class="text-slate-500 mt-2 text-sm">Thank you to the organisations making PyData Kampala possible</p>
-    </div>
-
-    {% if sponsors %}
-    <div class="flex flex-wrap justify-center items-center gap-4 mb-14">
-      {% for sponsor in sponsors %}
-      <a href="{{ sponsor.website }}" target="_blank" rel="noopener noreferrer"
-         class="group bg-white border border-slate-100 rounded-xl px-6 py-4 hover:border-blue-200 hover:shadow-md transition text-center min-w-[140px]">
-        {% if sponsor.logo %}
-          <img src="{{ sponsor.logo.url }}" alt="{{ sponsor.name }}" class="h-10 mx-auto object-contain mb-2 grayscale group-hover:grayscale-0 transition">
-        {% else %}
-          <p class="font-semibold text-slate-700 group-hover:text-blue-700 transition">{{ sponsor.name }}</p>
-        {% endif %}
-        <span class="text-xs text-slate-400 uppercase tracking-wide">{{ sponsor.get_tier_display }}</span>
-      </a>
-      {% endfor %}
+    {% else %}
+    <div class="card-modern p-8 md:p-10 text-center">
+      <p class="text-slate-900 font-semibold mb-2">Gallery photos coming soon</p>
+      <p class="text-slate-500 text-sm">Once photos are uploaded and marked active, they will appear here.</p>
     </div>
     {% endif %}
 
-    <!-- Become a sponsor CTA -->
-    <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-center gap-8">
-      <div class="flex-1 text-white">
-        <h3 class="text-xl font-semibold mb-2">Become a Sponsor</h3>
-        <p class="text-blue-200 text-sm leading-relaxed max-w-md">
-          Partner with PyData Kampala and connect your brand with hundreds of data professionals,
-          researchers, and students across East Africa.
-        </p>
-        <ul class="mt-4 space-y-1.5 text-blue-100 text-sm">
-          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Logo on website and event materials</li>
-          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Job postings on our jobs board</li>
-          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Speaking opportunities at events</li>
-        </ul>
-      </div>
-      <div class="shrink-0 w-full md:w-auto">
-        <a href="{% url 'conference:sponsor_apply' %}"
-           class="block w-full md:w-auto text-center bg-white text-blue-700 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition shadow-lg text-sm">
-          Apply to Sponsor →
-        </a>
-      </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+{% if programs %}
+<section class="section-spacing bg-slate-50">
+
+  <div class="container-main">
+
+    <div class="mb-14">
+
+      <p class="text-blue-600 text-xs font-semibold uppercase tracking-[0.3em] mb-3">
+        Programs
+      </p>
+
+      <h2 class="text-4xl font-black tracking-tight text-slate-900">
+        Explore Our Programs
+      </h2>
+
     </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+      {% for program in programs %}
+      <div class="card-modern p-8">
+
+        <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-6">
+
+          <svg class="w-6 h-6 text-blue-600"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               viewBox="0 0 24 24">
+
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+
+          </svg>
+
+        </div>
+
+        <h3 class="text-xl font-bold text-slate-900 mb-4">
+          {{ program.title }}
+        </h3>
+
+        <p class="text-slate-500 leading-relaxed text-sm mb-8">
+          {{ program.summary }}
+        </p>
+
+        <div class="flex gap-3">
+
+          <a href="{% url 'conference:program_detail' program.slug %}"
+             class="border border-blue-200 text-blue-700 px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-50 transition">
+            Details
+          </a>
+
+          <a href="{% url 'conference:program_proposals' program.slug %}"
+             class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition">
+            Submit
+          </a>
+
+        </div>
+
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- SPONSORS -->
+<section class="section-spacing bg-white border-t border-slate-100">
+
+  <div class="container-main">
+
+    <div class="text-center mb-16">
+
+      <p class="text-blue-600 text-xs font-semibold uppercase tracking-[0.3em] mb-3">
+        Partners
+      </p>
+
+      <h2 class="text-4xl font-black tracking-tight text-slate-900">
+        Our Sponsors
+      </h2>
+
+      <p class="text-slate-500 mt-4 max-w-2xl mx-auto">
+        Thank you to the organisations supporting the PyData Kampala community.
+      </p>
+
+    </div>
+
+    {% if sponsors %}
+    <div class="flex flex-wrap justify-center items-center gap-6">
+
+      {% for sponsor in sponsors %}
+      <a href="{{ sponsor.website }}"
+         target="_blank"
+         class="card-modern px-8 py-6 min-w-[180px] text-center">
+
+        {% if sponsor.logo %}
+        <img src="{{ sponsor.logo.url }}"
+             alt="{{ sponsor.name }}"
+             class="h-12 mx-auto object-contain grayscale hover:grayscale-0 transition">
+        {% else %}
+        <p class="font-semibold text-slate-700">
+          {{ sponsor.name }}
+        </p>
+        {% endif %}
+
+      </a>
+      {% endfor %}
+
+    </div>
+    {% endif %}
 
   </div>
 </section>
 
-<script>
-  (function () {
-    const slides = document.querySelectorAll('.hero-slide');
-    const dots = document.querySelectorAll('.hero-dot');
-    const nextBtn = document.getElementById('hero-next');
-    const prevBtn = document.getElementById('hero-prev');
-    if (!slides.length || !nextBtn) return;
-
-    let index = 0;
-
-    const showSlide = (newIndex) => {
-      slides[index].classList.add('opacity-0');
-      dots[index]?.classList.remove('bg-white', 'w-8');
-      dots[index]?.classList.add('bg-white/40', 'w-2');
-
-      index = (newIndex + slides.length) % slides.length;
-
-      slides[index].classList.remove('opacity-0');
-      dots[index]?.classList.add('bg-white', 'w-8');
-      dots[index]?.classList.remove('bg-white/40', 'w-2');
-    };
-
-    nextBtn.addEventListener('click', () => showSlide(index + 1));
-    prevBtn.addEventListener('click', () => showSlide(index - 1));
-    dots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
-
-    const timer = setInterval(() => showSlide(index + 1), 5000);
-    document.getElementById('hero-slider')?.addEventListener('mouseenter', () => clearInterval(timer));
-  })();
-</script>
 {% endblock %}
