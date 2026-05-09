@@ -77,6 +77,9 @@ urlpatterns = [
     path('meetups/<int:pk>/edit/', views.meetup_edit, name='meetup_edit'),
     path('meetups/<int:pk>/delete/', views.meetup_delete, name='meetup_delete'),
 
+    # Debug
+    path('debug/storage/', views.storage_debug, name='storage_debug'),
+
     # Projects
     path('projects/', views.project_list, name='project_list'),
     path('projects/new/', views.project_create, name='project_create'),

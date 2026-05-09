@@ -3,7 +3,13 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Count
+import logging
+import os
+from django.conf import settings
+from django.http import JsonResponse
 from cloudinary.exceptions import Error as CloudinaryError
+
+logger = logging.getLogger(__name__)
 
 from conference.models import (
     Speaker, Talk, ScheduleSlot, Sponsor, JobPosting,
@@ -86,8 +92,12 @@ def _create_view(request, form_class, template, redirect_name):
     if form.is_valid():
         try:
             form.save()
-        except CloudinaryError:
+        except CloudinaryError as e:
+            logger.exception("Cloudinary upload failed during create")
             form.add_error(None, 'Image upload failed. Check your Cloudinary credentials and try again.')
+        except Exception as e:
+            logger.exception("Unexpected error during create")
+            form.add_error(None, 'An unexpected error occurred. Check the server logs.')
         else:
             messages.success(request, 'Created successfully.')
             return redirect(redirect_name)
@@ -100,12 +110,38 @@ def _edit_view(request, form_class, template, redirect_name, pk):
     if form.is_valid():
         try:
             form.save()
-        except CloudinaryError:
+        except CloudinaryError as e:
+            logger.exception("Cloudinary upload failed during edit")
             form.add_error(None, 'Image upload failed. Check your Cloudinary credentials and try again.')
+        except Exception as e:
+            logger.exception("Unexpected error during edit")
+            form.add_error(None, 'An unexpected error occurred. Check the server logs.')
         else:
             messages.success(request, 'Updated successfully.')
             return redirect(redirect_name)
     return render(request, template, {'form': form, 'action': 'Edit', 'object': obj})
+
+
+@login_required(login_url='portal:login')
+@staff_required
+def storage_debug(request):
+    """Admin-only debug endpoint exposing storage/Cloudinary status (safe values)."""
+    cloudinary_url = os.environ.get('CLOUDINARY_URL')
+    cloudinary_present = bool(cloudinary_url and cloudinary_url.startswith('cloudinary://'))
+    if cloudinary_present:
+        masked = f"{cloudinary_url[:10]}...{cloudinary_url[-6:]}"
+    else:
+        masked = None
+    data = {
+        'debug': settings.DEBUG,
+        'cloudinary_configured': cloudinary_present,
+        'cloudinary_url_masked': masked,
+        'storages_default': settings.STORAGES.get('default', {}).get('BACKEND') if hasattr(settings, 'STORAGES') else None,
+        'storages_staticfiles': settings.STORAGES.get('staticfiles', {}).get('BACKEND') if hasattr(settings, 'STORAGES') else None,
+        'STATIC_ROOT': str(settings.STATIC_ROOT),
+        'MEDIA_ROOT': str(settings.MEDIA_ROOT),
+    }
+    return JsonResponse(data)
 
 
 def _delete_view(request, model, redirect_name, pk):
